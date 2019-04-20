@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Shop</title>
+</head>
+<body>
+<!--<p th:text="${name}">name</p>-->
+<!--<p th:text="'Hello！ ' + ${name} + '!'">hello world</p>-->
+<!--<p th:text="|Hello！ ${name}!|">hello world</p>-->
+<table>
+    <thead>
+    <tr>
+        <th>id</th>
+        <th>name</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="allC: ${allCategory}">
+        <td th:text="${allC.id}"></td>
+        <td th:text="${allC.name}"></td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>

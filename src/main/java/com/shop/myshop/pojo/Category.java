@@ -1,10 +1,11 @@
 package com.shop.myshop.pojo;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 @Entity
 @Table(name = "category", schema = "shop")
-public class Category {
+public class Category implements Serializable {
     private int id;
     private String name;
 
