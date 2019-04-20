@@ -1,7 +1,5 @@
 package com.shop.myshop.controller;
 
-import com.mysql.cj.util.LogUtils;
-import com.shop.myshop.dao.CategoryDao;
 import com.shop.myshop.pojo.Category;
 import com.shop.myshop.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
