@@ -1,8 +1,7 @@
 package com.shop.myshop;
 
-import com.shop.myshop.ShiroRealm.RetryLimitHashedCredentialsMatcher;
-import com.shop.myshop.ShiroRealm.ShiroRealm;
-import org.apache.shiro.authc.credential.CredentialsMatcher;
+import com.shop.myshop.shiroRealm.RetryLimitHashedCredentialsMatcher;
+import com.shop.myshop.shiroRealm.ShiroRealm;
 import org.apache.shiro.mgt.SecurityManager;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.session.SessionListener;

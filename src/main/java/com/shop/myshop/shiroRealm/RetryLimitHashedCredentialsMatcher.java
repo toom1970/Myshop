@@ -1,4 +1,4 @@
-package com.shop.myshop.ShiroRealm;
+package com.shop.myshop.shiroRealm;
 
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
