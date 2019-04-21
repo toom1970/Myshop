@@ -7,8 +7,10 @@ import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
+import org.apache.shiro.util.ByteSource;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import javax.websocket.OnError;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -39,6 +41,7 @@ public class ShiroRealm extends AuthorizingRealm {
         User user = userDao.findByName(userName);
         if (user == null)
             throw new AccountException("User Not Exist");
-        return new SimpleAuthenticationInfo(user, user.getPassword(), getName());
+        ByteSource salt = ByteSource.Util.bytes(user.getSalt());
+        return new SimpleAuthenticationInfo(user, user.getPassword(),salt, getName());
     }
 }
