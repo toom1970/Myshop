@@ -30,6 +30,8 @@ public class ShiroRealm extends AuthorizingRealm {
 //            permissions.add(permission);
         simpleAuthorizationInfo.setStringPermissions(permissions);
         return simpleAuthorizationInfo;
+
+
     }
 
     @Override
