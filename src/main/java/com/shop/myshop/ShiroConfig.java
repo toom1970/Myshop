@@ -1,6 +1,7 @@
 package com.shop.myshop;
 
 import com.shop.myshop.shiroRealm.RetryLimitHashedCredentialsMatcher;
+import com.shop.myshop.shiroRealm.ShiroCacheManager;
 import com.shop.myshop.shiroRealm.ShiroRealm;
 import org.apache.shiro.mgt.SecurityManager;
 import org.apache.shiro.session.Session;
@@ -13,6 +14,9 @@ import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
 import org.apache.shiro.web.servlet.SimpleCookie;
 import org.apache.shiro.web.session.mgt.DefaultWebSessionManager;
+import org.crazycake.shiro.RedisCacheManager;
+import org.crazycake.shiro.RedisManager;
+import org.crazycake.shiro.RedisSessionDAO;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
@@ -40,11 +44,41 @@ public class ShiroConfig {
         return retryLimitHashedCredentialsMatcher;
     }
 
+//    @Bean
+//    public ShiroRedisCache redisManager(RedisTemplate redisTemplate) {
+//        ShiroRedisCache redisManager = new ShiroRedisCache("shiro", redisTemplate);
+//        return redisManager;
+//    }
+
+    @Bean
+    public RedisManager redisManager() {
+        RedisManager redisManager = new RedisManager();
+        redisManager.setHost("127.0.0.1:6379");
+        redisManager.setTimeout(3000);
+        return redisManager;
+    }
+
+    @Bean
+    public RedisCacheManager redisCacheManager() {
+        RedisCacheManager redisCacheManager = new RedisCacheManager();
+        redisCacheManager.setRedisManager(redisManager());
+        return redisCacheManager;
+    }
+
+    @Bean
+    public RedisSessionDAO redisSessionDAO(){
+        RedisSessionDAO redisSessionDAO = new RedisSessionDAO();
+        redisSessionDAO.setRedisManager(redisManager());
+        return redisSessionDAO;
+    }
+
     @Bean
     @DependsOn("lifecycleBeanPostProcessor")
     public ShiroRealm shiroRealm() {
         ShiroRealm shiroRealm = new ShiroRealm();
         shiroRealm.setCredentialsMatcher(retryLimitHashedCredentialsMatcher());
+        shiroRealm.setCachingEnabled(true);
+        shiroRealm.setCacheManager(redisCacheManager());
         return shiroRealm;
     }
 
@@ -90,6 +124,8 @@ public class ShiroConfig {
         sessionManager.setSessionIdCookie(simpleCookie());
         sessionManager.setGlobalSessionTimeout(300000);
         sessionManager.setDeleteInvalidSessions(true);
+
+        sessionManager.setSessionDAO(redisSessionDAO());
         return sessionManager;
     }
 
@@ -98,6 +134,7 @@ public class ShiroConfig {
         DefaultWebSecurityManager securityManager = new DefaultWebSecurityManager();
         securityManager.setRealm(shiroRealm());
         securityManager.setSessionManager(sessionManager());
+        securityManager.setCacheManager(redisCacheManager());
         return securityManager;
     }
 
