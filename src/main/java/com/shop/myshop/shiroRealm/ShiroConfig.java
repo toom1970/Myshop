@@ -1,8 +1,10 @@
-package com.shop.myshop;
+package com.shop.myshop.shiroRealm;
 
 import com.shop.myshop.shiroRealm.RetryLimitHashedCredentialsMatcher;
 import com.shop.myshop.shiroRealm.ShiroCacheManager;
 import com.shop.myshop.shiroRealm.ShiroRealm;
+import com.shop.myshop.shiroRealm.ShiroRedisCache;
+import org.apache.shiro.cache.Cache;
 import org.apache.shiro.mgt.SecurityManager;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.session.SessionListener;
@@ -20,6 +22,7 @@ import org.crazycake.shiro.RedisSessionDAO;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
+import org.springframework.data.redis.core.RedisTemplate;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -40,21 +43,14 @@ public class ShiroConfig {
         retryLimitHashedCredentialsMatcher.setHashAlgorithmName("MD5");
         retryLimitHashedCredentialsMatcher.setHashIterations(2);
         //是否储存为16进制
-        retryLimitHashedCredentialsMatcher.setStoredCredentialsHexEncoded(false);
+//        retryLimitHashedCredentialsM1atcher.setStoredCredentialsHexEncoded(false);
         return retryLimitHashedCredentialsMatcher;
     }
-
-//    @Bean
-//    public ShiroRedisCache redisManager(RedisTemplate redisTemplate) {
-//        ShiroRedisCache redisManager = new ShiroRedisCache("shiro", redisTemplate);
-//        return redisManager;
-//    }
 
     @Bean
     public RedisManager redisManager() {
         RedisManager redisManager = new RedisManager();
         redisManager.setHost("127.0.0.1:6379");
-        redisManager.setTimeout(3000);
         return redisManager;
     }
 
@@ -62,11 +58,13 @@ public class ShiroConfig {
     public RedisCacheManager redisCacheManager() {
         RedisCacheManager redisCacheManager = new RedisCacheManager();
         redisCacheManager.setRedisManager(redisManager());
+        //ttl
+        redisCacheManager.setExpire(300);
         return redisCacheManager;
     }
 
     @Bean
-    public RedisSessionDAO redisSessionDAO(){
+    public RedisSessionDAO redisSessionDAO() {
         RedisSessionDAO redisSessionDAO = new RedisSessionDAO();
         redisSessionDAO.setRedisManager(redisManager());
         return redisSessionDAO;
@@ -78,6 +76,9 @@ public class ShiroConfig {
         ShiroRealm shiroRealm = new ShiroRealm();
         shiroRealm.setCredentialsMatcher(retryLimitHashedCredentialsMatcher());
         shiroRealm.setCachingEnabled(true);
+//        shiroRealm.setCacheManager(redisCacheManager());
+        shiroRealm.setAuthenticationCachingEnabled(true);
+        shiroRealm.setAuthorizationCachingEnabled(true);
         shiroRealm.setCacheManager(redisCacheManager());
         return shiroRealm;
     }
@@ -135,6 +136,7 @@ public class ShiroConfig {
         securityManager.setRealm(shiroRealm());
         securityManager.setSessionManager(sessionManager());
         securityManager.setCacheManager(redisCacheManager());
+//        securityManager.setCacheManager(shiroCacheManager());
         return securityManager;
     }
 

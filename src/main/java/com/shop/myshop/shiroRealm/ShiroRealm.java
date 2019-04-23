@@ -8,11 +8,14 @@ import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.util.ByteSource;
+import org.apache.shiro.util.SimpleByteSource;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.EnableCaching;
 
 import java.util.HashSet;
 import java.util.Set;
 
+@EnableCaching
 public class ShiroRealm extends AuthorizingRealm {
     @Autowired
     UserDao userDao;
@@ -40,7 +43,9 @@ public class ShiroRealm extends AuthorizingRealm {
         User user = userDao.findByName(userName);
         if (user == null)
             throw new AccountException("User Not Exist");
-        ByteSource salt = ByteSource.Util.bytes(user.getSalt());
-        return new SimpleAuthenticationInfo(user, user.getPassword(),salt, getName());
+//        ShiroSimpleByteSource salt = ByteSourceUtils.serialize(user.getSalt());
+//        SimpleByteSource salt = ShiroSimpleByteSource.Util.bytes(user.getSalt());
+        ByteSource salt = new ShiroSimpleByteSource(user.getSalt());
+        return new SimpleAuthenticationInfo(user, user.getPassword(), salt, getName());
     }
 }

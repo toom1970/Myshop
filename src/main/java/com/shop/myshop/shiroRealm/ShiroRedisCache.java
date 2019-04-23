@@ -25,14 +25,14 @@ public class ShiroRedisCache implements Cache {
     public Object get(Object o) throws CacheException {
         if (o == null)
             return null;
-        return redisTemplate.opsForValue().get(o);
+        return redisTemplate.boundValueOps(o).get();
     }
 
     @Override
     public Object put(Object o, Object o2) throws CacheException {
         if (o == null || o2 == null)
             return null;
-        redisTemplate.opsForValue().set(o, o2);
+        redisTemplate.boundValueOps(o).set(o2);
         return o2;
     }
 
@@ -40,7 +40,7 @@ public class ShiroRedisCache implements Cache {
     public Object remove(Object o) throws CacheException {
         if (o == null)
             return null;
-        Object v = redisTemplate.opsForValue().get(o);
+        Object v = get(o);
         redisTemplate.delete(o);
         return v;
     }

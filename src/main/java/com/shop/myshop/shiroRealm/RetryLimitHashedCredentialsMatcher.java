@@ -10,4 +10,7 @@ public class RetryLimitHashedCredentialsMatcher extends HashedCredentialsMatcher
 //        String username = (String) token.getPrincipal();
         return super.doCredentialsMatch(token, info);
     }
+
+    public RetryLimitHashedCredentialsMatcher() {
+    }
 }
