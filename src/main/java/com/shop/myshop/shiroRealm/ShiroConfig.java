@@ -1,10 +1,5 @@
 package com.shop.myshop.shiroRealm;
 
-import com.shop.myshop.shiroRealm.RetryLimitHashedCredentialsMatcher;
-import com.shop.myshop.shiroRealm.ShiroCacheManager;
-import com.shop.myshop.shiroRealm.ShiroRealm;
-import com.shop.myshop.shiroRealm.ShiroRedisCache;
-import org.apache.shiro.cache.Cache;
 import org.apache.shiro.mgt.SecurityManager;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.session.SessionListener;
@@ -22,7 +17,6 @@ import org.crazycake.shiro.RedisSessionDAO;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
-import org.springframework.data.redis.core.RedisTemplate;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -76,7 +70,6 @@ public class ShiroConfig {
         ShiroRealm shiroRealm = new ShiroRealm();
         shiroRealm.setCredentialsMatcher(retryLimitHashedCredentialsMatcher());
         shiroRealm.setCachingEnabled(true);
-//        shiroRealm.setCacheManager(redisCacheManager());
         shiroRealm.setAuthenticationCachingEnabled(true);
         shiroRealm.setAuthorizationCachingEnabled(true);
         shiroRealm.setCacheManager(redisCacheManager());
@@ -136,7 +129,6 @@ public class ShiroConfig {
         securityManager.setRealm(shiroRealm());
         securityManager.setSessionManager(sessionManager());
         securityManager.setCacheManager(redisCacheManager());
-//        securityManager.setCacheManager(shiroCacheManager());
         return securityManager;
     }
 

@@ -2,12 +2,9 @@ package com.shop.myshop.controller;
 
 import com.shop.myshop.dao.UserDao;
 import com.shop.myshop.pojo.Category;
-import com.shop.myshop.pojo.User;
 import com.shop.myshop.service.CategoryService;
-import com.shop.myshop.shiroRealm.ShiroSimpleByteSource;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.*;
-import org.apache.shiro.crypto.hash.SimpleHash;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -15,12 +12,13 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.logging.Logger;
 
 @Controller
 public class HomeController {
-    Logger logger = Logger.getLogger("HomeController");
+    private Logger logger = Logger.getLogger("HomeController");
 
     @Autowired
     CategoryService categoryService;
@@ -29,7 +27,7 @@ public class HomeController {
 
     //    @ResponseBody
     @RequestMapping("/")
-    public String index(Model model) {
+    public String index(HttpServletRequest request, Model model) {
 //        Category newCategory = new Category("yura");
 //        categoryDao.save(newCategory);
 //        model.addAttribute("name", newCategory.getName());
@@ -40,9 +38,9 @@ public class HomeController {
     }
 
     @RequestMapping("/login")
-    public String login(@RequestParam("username") String username, @RequestParam("userpwd") String userpwd, Model model) {
+    public String login(@RequestParam("username") String username, @RequestParam("password") String userpwd, Model model) {
         if (username == null && userpwd == null) {
-//        if (username.equals("bbb")) {
+//            if (username.equals("bbb")) {
 //            String hashAlgorithmName = "MD5";
 //            Object result = new SimpleHash(hashAlgorithmName, userpwd, new ShiroSimpleByteSource(username), 2);
 //            String saltpwd = result.toString();
@@ -51,7 +49,7 @@ public class HomeController {
 //            user.setPassword(saltpwd);
 //            user.setSalt(username);
 //            userDao.save(user);
-//        }
+//            }
             return "login";
         } else {
             Subject subject = SecurityUtils.getSubject();
@@ -78,6 +76,5 @@ public class HomeController {
 ////            return "redirect:/";
         }
         return "login";
-        //    }
     }
 }
