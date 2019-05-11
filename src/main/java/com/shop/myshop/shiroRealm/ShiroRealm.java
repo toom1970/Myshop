@@ -1,29 +1,30 @@
 package com.shop.myshop.shiroRealm;
 
-import com.shop.myshop.dao.UserDao;
 import com.shop.myshop.pojo.User;
+import com.shop.myshop.service.UserService;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.util.ByteSource;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.EnableCaching;
 
+import javax.annotation.Resource;
 import java.util.HashSet;
 import java.util.Set;
 
 @EnableCaching
 public class ShiroRealm extends AuthorizingRealm {
-    @Autowired
-    UserDao userDao;
+
+    @Resource(name = "userService")
+    UserService userService;
 
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principalCollection) {
         SimpleAuthorizationInfo simpleAuthorizationInfo = new SimpleAuthorizationInfo();
         User user = (User) principalCollection.getPrimaryPrincipal();
-        User userReal = userDao.getOne(user.getId());
+        User userReal = userService.getById(user.getId());
         Set<String> roles = new HashSet<>();
 //        for (String roleType : userReal.getRoles())
 //            roles.add(roleType);
@@ -39,7 +40,7 @@ public class ShiroRealm extends AuthorizingRealm {
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authenticationToken) throws AuthenticationException {
         UsernamePasswordToken usernamePasswordToken = (UsernamePasswordToken) authenticationToken;
         String userName = (String) usernamePasswordToken.getPrincipal();
-        User user = userDao.findByName(userName);
+        User user = userService.findByName(userName);
         if (user == null)
             throw new AccountException("User Not Exist");
         ByteSource salt = new ShiroSimpleByteSource(user.getSalt());

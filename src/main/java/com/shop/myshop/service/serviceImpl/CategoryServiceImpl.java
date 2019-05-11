@@ -11,12 +11,13 @@ import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import java.util.List;
 
 @Service
 @CacheConfig(cacheNames = "category")
 public class CategoryServiceImpl implements CategoryService {
-    @Autowired
+    @Resource(name = "categoryDao")
     CategoryDao categoryDao;
 
     @Override
@@ -40,8 +41,8 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
 //    @CacheEvict(allEntries = true)
     public int add(Category category) {
-        categoryDao.save(category);
-        return 0;
+        Category saved = categoryDao.saveAndFlush(category);
+        return saved.getId();
     }
 
     @Override
@@ -54,7 +55,7 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     @CachePut(key = "#category.getId()")
     public int update(Category category) {
-        categoryDao.save(category);
-        return 0;
+        Category saved = categoryDao.saveAndFlush(category);
+        return saved.getId();
     }
 }
