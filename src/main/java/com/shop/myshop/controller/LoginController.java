@@ -3,26 +3,28 @@ package com.shop.myshop.controller;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.subject.Subject;
+import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
+@Controller
 @RequestMapping("/login")
 public class LoginController {
 
-    @RequestMapping("/login")
-    public String login(@RequestParam("username") String username, @RequestParam("password") String userpwd, Model model) {
+    @RequestMapping("/")
+//    @ResponseBody
+    public String nnn(Model model) {
+        model.addAttribute("Login", "asd");
+        return "login";
+    }
+
+    @RequestMapping(value = "/user", method = {RequestMethod.POST, RequestMethod.GET})
+    public String login(@RequestParam(value = "username", required = false) String username, @RequestParam(value = "password",required = false) String userpwd, Model model) {
         if (username == null && userpwd == null) {
-//            if (username.equals("bbb")) {
-//            String hashAlgorithmName = "MD5";
-//            Object result = new SimpleHash(hashAlgorithmName, userpwd, new ShiroSimpleByteSource(username), 2);
-//            String saltpwd = result.toString();
-//            User user = new User();
-//            user.setName(username);
-//            user.setPassword(saltpwd);
-//            user.setSalt(username);
-//            userDao.save(user);
-//            }
+            model.addAttribute("Login", "null");
             return "login";
         } else {
             Subject subject = SecurityUtils.getSubject();
