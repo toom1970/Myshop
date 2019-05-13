@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import java.util.List;
 
-@Service
+@Service("tagService")
 @CacheConfig(cacheNames = "category")
 public class TagServiceImpl implements TagService {
     @Resource(name = "tagDao")

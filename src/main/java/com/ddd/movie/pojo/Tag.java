@@ -1,11 +1,10 @@
 package com.ddd.movie.pojo;
 
 import javax.persistence.*;
-import java.io.Serializable;
 
 @Entity
-@Table(name = "category", schema = "shop")
-public class Tag implements Serializable {
+@Table(name = "tag")
+public class Tag {
     private int id;
     private String name;
 
@@ -29,10 +28,23 @@ public class Tag implements Serializable {
         this.name = name;
     }
 
-    public Tag() {
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Tag tag = (Tag) o;
+
+        if (id != tag.id) return false;
+        if (name != null ? !name.equals(tag.name) : tag.name != null) return false;
+
+        return true;
     }
 
-    public Tag(String name) {
-        this.name = name;
+    @Override
+    public int hashCode() {
+        int result = id;
+        result = 31 * result + (name != null ? name.hashCode() : 0);
+        return result;
     }
 }

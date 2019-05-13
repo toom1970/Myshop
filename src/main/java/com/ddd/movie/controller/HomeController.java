@@ -1,12 +1,14 @@
 package com.ddd.movie.controller;
 
-import com.ddd.movie.service.TagService;
 import com.ddd.movie.pojo.Tag;
+import com.ddd.movie.service.TagService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.logging.Logger;
@@ -15,7 +17,7 @@ import java.util.logging.Logger;
 public class HomeController {
     private Logger logger = Logger.getLogger("HomeController");
 
-    @Autowired
+    @Resource(name = "tagService")
     TagService tagService;
 
     //    @ResponseBody

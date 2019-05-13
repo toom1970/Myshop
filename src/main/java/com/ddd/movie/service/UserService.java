@@ -2,6 +2,7 @@ package com.ddd.movie.service;
 
 import com.ddd.movie.pojo.User;
 
+import java.util.HashSet;
 import java.util.List;
 
 public interface UserService {

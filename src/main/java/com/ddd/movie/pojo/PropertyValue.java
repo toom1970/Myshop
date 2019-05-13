@@ -3,7 +3,7 @@ package com.ddd.movie.pojo;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "propertyvalue", schema = "shop")
+@Table(name = "propertyvalue")
 public class PropertyValue {
     private int id;
     private String value;
@@ -26,5 +26,25 @@ public class PropertyValue {
 
     public void setValue(String value) {
         this.value = value;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        PropertyValue that = (PropertyValue) o;
+
+        if (id != that.id) return false;
+        if (value != null ? !value.equals(that.value) : that.value != null) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = id;
+        result = 31 * result + (value != null ? value.hashCode() : 0);
+        return result;
     }
 }

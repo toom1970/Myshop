@@ -1,5 +1,6 @@
 package com.ddd.movie.controller;
 
+import com.ddd.movie.pojo.User;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.subject.Subject;
@@ -8,13 +9,14 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 @RequestMapping("/login")
 public class LoginController {
 
     @RequestMapping("/")
-//    @ResponseBody
+    @ResponseBody
     public String index(Model model) {
         model.addAttribute("Login", "asd");
         return "login";

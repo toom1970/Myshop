@@ -1,5 +1,6 @@
 package com.ddd.movie.shiroRealm;
 
+import com.ddd.movie.pojo.Role;
 import com.ddd.movie.service.UserService;
 import com.ddd.movie.pojo.User;
 import org.apache.shiro.authc.*;
@@ -23,11 +24,12 @@ public class ShiroRealm extends AuthorizingRealm {
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principalCollection) {
         SimpleAuthorizationInfo simpleAuthorizationInfo = new SimpleAuthorizationInfo();
-        User user = (User) principalCollection.getPrimaryPrincipal();
-        User userReal = userService.getById(user.getId());
+//        User user = (User) principalCollection.getPrimaryPrincipal();
+        int id = (int)principalCollection.getPrimaryPrincipal();
+        User userReal = userService.getById(id);
         Set<String> roles = new HashSet<>();
-//        for (String roleType : userReal.getRoles())
-//            roles.add(roleType);
+        for (Role roleType : userReal.getRoles())
+            roles.add(roleType.getRoleValue());
         simpleAuthorizationInfo.setRoles(roles);
         Set<String> permissions = new HashSet<>();
 //        for (String permission : userReal.getPermissions())

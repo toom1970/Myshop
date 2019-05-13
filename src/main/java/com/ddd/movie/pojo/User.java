@@ -2,14 +2,17 @@ package com.ddd.movie.pojo;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Set;
 
 @Entity
-@Table(name = "user", schema = "shop")
+@Table(name = "user")
 public class User implements Serializable {
     private int id;
     private String name;
     private String password;
     private String salt;
+    private Set<Role> roles;
+//    private Set<> permissions;
 
     @Id
     @Column(name = "id")
@@ -52,4 +55,21 @@ public class User implements Serializable {
         this.salt = salt;
     }
 
+    @OneToMany
+    @JoinColumn(name = "uid")
+    public Set<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
+    }
+//
+//    public HashSet<String> getPermissions() {
+//        return permissions;
+//    }
+//
+//    public void setPermissions(HashSet<String> permissions) {
+//        this.permissions = permissions;
+//    }
 }

@@ -54,6 +54,7 @@ public class ShiroConfig {
         redisCacheManager.setRedisManager(redisManager());
         //ttl
         redisCacheManager.setExpire(300);
+//        redisCacheManager.setPrincipalIdFieldName("id");
         return redisCacheManager;
     }
 
