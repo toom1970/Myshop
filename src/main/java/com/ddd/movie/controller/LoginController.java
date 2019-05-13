@@ -1,6 +1,5 @@
 package com.ddd.movie.controller;
 
-import com.ddd.movie.pojo.User;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.subject.Subject;
