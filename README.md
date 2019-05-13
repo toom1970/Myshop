@@ -12,7 +12,7 @@ CREATE TABLE movie (
   PRIMARY KEY (id),
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
-- user
+- ###user
 CREATE TABLE user (
   id int(11) NOT NULL AUTO_INCREMENT,
   name varchar(255) DEFAULT NULL,
@@ -20,7 +20,7 @@ CREATE TABLE user (
   salt varchar(255) DEFAULT NULL,
   PRIMARY KEY (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-- tag
+- ###tag
 CREATE TABLE tag (
   id int(11) NOT NULL AUTO_INCREMENT,
   mid int(11) DEFAULT NULL,
@@ -29,14 +29,14 @@ CREATE TABLE tag (
   CONSTRAINT fk_tag_movie FOREIGN KEY (mid) REFERENCES movie (id)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
-- property
+- ###property
 CREATE TABLE property (
   id int(11) NOT NULL AUTO_INCREMENT,
   name varchar(255) DEFAULT NULL,
   PRIMARY KEY (id)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
-- propertyValue
+- ###propertyValue
 CREATE TABLE propertyvalue (
   id int(11) NOT NULL AUTO_INCREMENT,
   pid int(11) DEFAULT NULL,
