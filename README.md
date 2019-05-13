@@ -20,6 +20,15 @@ CREATE TABLE user (
   salt varchar(255) DEFAULT NULL,
   PRIMARY KEY (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+- ### role
+CREATE TABLE role (
+  id int(11) NOT NULL AUTO_INCREMENT,
+  uid int(11) NOT NULL,
+  value varchar(255) NOT NULL,
+  PRIMARY KEY (id),
+  CONSTRAINT fk_role_user FOREIGN KEY (uid) REFERENCES user (id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 - ### tag
 CREATE TABLE tag (
   id int(11) NOT NULL AUTO_INCREMENT,
