@@ -1,6 +1,9 @@
 package com.ddd.movie.pojo;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import javax.persistence.*;
+import java.sql.Date;
 import java.sql.Timestamp;
 
 @Entity
@@ -9,7 +12,7 @@ public class Movie {
     private int id;
     private String name;
     private String director;
-    private Timestamp releaseDate;
+    private Date releaseDate;
 
     @Id
     @Column(name = "id")
@@ -42,12 +45,12 @@ public class Movie {
     }
 
     @Basic
-    @Column(name = "releaseDate")
-    public Timestamp getReleaseDate() {
+    @Column(name = "releasedate")
+    public Date getReleaseDate() {
         return releaseDate;
     }
 
-    public void setReleaseDate(Timestamp releaseDate) {
+    public void setReleaseDate(Date releaseDate) {
         this.releaseDate = releaseDate;
     }
 

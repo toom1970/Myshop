@@ -3,10 +3,7 @@ package com.ddd.movie.service.serviceImpl;
 import com.ddd.movie.pojo.Tag;
 import com.ddd.movie.service.TagService;
 import com.ddd.movie.dao.TagDao;
-import org.springframework.cache.annotation.CacheConfig;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.CachePut;
-import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.*;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -19,7 +16,7 @@ public class TagServiceImpl implements TagService {
     TagDao tagDao;
 
     @Override
-    @Cacheable(key = "'All'")
+    @Cacheable(key = "'all'")
     public List<Tag> findAll() {
         return tagDao.findAll();
     }
@@ -44,14 +41,20 @@ public class TagServiceImpl implements TagService {
     }
 
     @Override
-    @CacheEvict(key = "#tag.getId()")
+    @Caching(evict = {
+            @CacheEvict(key = "#tag.getId()"),
+            @CacheEvict(key = "#tag.getName()"),
+            @CacheEvict(key = "'all'")})
     public int delete(Tag tag) {
         tagDao.delete(tag);
         return 0;
     }
 
     @Override
-    @CachePut(key = "#tag.getId()")
+    @Caching(evict = {
+            @CacheEvict(key = "#tag.getId()"),
+            @CacheEvict(key = "#tag.getName()"),
+            @CacheEvict(key = "'all'")})
     public int update(Tag tag) {
         Tag saved = tagDao.saveAndFlush(tag);
         return saved.getId();

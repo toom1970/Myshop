@@ -14,15 +14,15 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @RequestMapping("/login")
 public class LoginController {
 
-    @RequestMapping("/")
-    @ResponseBody
+    @RequestMapping({"", "/"})
+//    @ResponseBody
     public String index(Model model) {
-        model.addAttribute("Login", "asd");
+        model.addAttribute("login", "plz login");
         return "login";
     }
 
     @RequestMapping(value = "/user", method = {RequestMethod.POST, RequestMethod.GET})
-    public String login(@RequestParam(value = "username", required = false) String username, @RequestParam(value = "password",required = false) String userpwd, Model model) {
+    public String login(@RequestParam(value = "username", required = false) String username, @RequestParam(value = "password", required = false) String userpwd, Model model) {
         if (username == null && userpwd == null) {
             model.addAttribute("Login", "null");
             return "login";
@@ -33,7 +33,6 @@ public class LoginController {
                 try {
                     subject.login(token);
                     model.addAttribute("Login", "Login Success");
-//                    subject.logout();
                 } catch (UnknownAccountException e) {
                     model.addAttribute("LoginMessage", e.getMessage());
                     return "login";
@@ -49,6 +48,6 @@ public class LoginController {
                 }
             }
         }
-        return "login";
+        return "home";
     }
 }

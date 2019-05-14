@@ -3,10 +3,7 @@ package com.ddd.movie.service.serviceImpl;
 import com.ddd.movie.service.UserService;
 import com.ddd.movie.dao.UserDao;
 import com.ddd.movie.pojo.User;
-import org.springframework.cache.annotation.CacheConfig;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.CachePut;
-import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.*;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -19,7 +16,7 @@ public class UserServiceImpl implements UserService {
     UserDao userDao;
 
     @Override
-    @Cacheable(key = "'All'")
+    @Cacheable(key = "'all'")
     public List<User> findAll() {
         return userDao.findAll();
     }
@@ -43,14 +40,20 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @CacheEvict(key = "#user.getId()")
+    @Caching(evict = {
+            @CacheEvict(key = "#user.getId()"),
+            @CacheEvict(key = "#user.getName()"),
+            @CacheEvict(key = "'all'")})
     public int delete(User user) {
         userDao.delete(user);
         return 0;
     }
 
     @Override
-    @CachePut(key = "#user.getId()")
+    @Caching(evict = {
+            @CacheEvict(key = "#user.getId()"),
+            @CacheEvict(key = "#user.getName()"),
+            @CacheEvict(key = "'all'")})
     public int update(User user) {
         User saved = userDao.saveAndFlush(user);
         return saved.getId();
