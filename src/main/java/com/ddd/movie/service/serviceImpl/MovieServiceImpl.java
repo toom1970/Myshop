@@ -4,6 +4,8 @@ import com.ddd.movie.dao.MovieDao;
 import com.ddd.movie.mapper.MovieMapper;
 import com.ddd.movie.pojo.Movie;
 import com.ddd.movie.service.MovieService;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CacheEvict;
@@ -24,8 +26,12 @@ public class MovieServiceImpl implements MovieService {
     MovieMapper movieMapper;
 
     @Override
-    public List<Movie> findAllMybatis() {
-        return movieMapper.findAll();
+    @Cacheable(key = "'page'+#page")
+    public PageInfo findAllMybatis(Integer page, Integer size) {
+        PageHelper.startPage(page, size);
+        List<Movie> pagelist = movieMapper.findAll();
+        PageInfo pageInfo = new PageInfo<>(pagelist);
+        return pageInfo;
     }
 
     @Override
@@ -73,7 +79,6 @@ public class MovieServiceImpl implements MovieService {
     }
 
     @Override
-//    @Cacheable(key = "#page.intValue()")
     public Page<Movie> findJpa(Integer page, Integer size) {
         if (null == page) {
             page = 0;

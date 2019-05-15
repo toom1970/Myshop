@@ -18,7 +18,7 @@
         </tr>
         </thead>
         <tbody>
-        <tr th:each="m: ${movies.getContent()}">
+        <tr th:each="m: ${movies}">
             <td th:text="${m.getId()}"></td>
             <td th:text="${m.getName()}"></td>
             <td th:text="${m.getDirector()}"></td>
@@ -38,15 +38,15 @@
 <br>
 <div class="text-center">
     <ul class="pagination">
-        <li><a th:if="${movies.isFirst()}" th:href="@{'?page='+${movies.getNumber()}}">&laquo;</a></li>
-        <li><a th:unless="${movies.isFirst()}" th:href="@{'?page='+${movies.getNumber()-1}}">&laquo;</a></li>
-        <li><a th:href="@{'?page='+${movies.getNumber()}}" class="activeTableTab">1</a></li>
+        <li><a th:if="${pages.isIsFirstPage()}" th:href="@{'?page='+${pages.getPageNum()}}">&laquo;</a></li>
+        <li><a th:unless="${pages.isIsFirstPage()}" th:href="@{'?page='+${pages.getPageNum()-1}}">&laquo;</a></li>
+        <li><a th:href="@{'?page='+${pages.getPageNum()}}" th:text="${pages.getPageNum()}">1</a></li>
         <li><a href=" #">2</a></li>
         <li><a href="#">3</a></li>
         <li><a href="#">4</a></li>
         <li><a href="#">5</a></li>
-        <li><a th:if="${movies.isLast()}" th:href="@{'?page='+${movies.getNumber()}}">&raquo;</a></li>
-        <li><a th:unless="${movies.isLast()}" th:href="@{'?page='+${movies.getNumber()+1}}">&raquo;</a></li>
+        <li><a th:if="${pages.isIsLastPage()}" th:href="@{'?page='+${pages.getPageNum()}}">&raquo;</a></li>
+        <li><a th:unless="${pages.isIsLastPage()}" th:href="@{'?page='+${pages.getPageNum()+1}}">&raquo;</a></li>
     </ul>
 </div>
 <div class="text-center">
