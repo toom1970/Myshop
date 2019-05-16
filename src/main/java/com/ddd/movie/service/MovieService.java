@@ -10,10 +10,9 @@ import java.util.Map;
 public interface MovieService {
     List<Movie> findAll();
 
-//    List<Movie> findAllMybatis(Integer page, Integer size);
     PageInfo findAllMybatis(Integer page, Integer size);
 
-    Movie getById(int id);
+    Movie findById(int id);
 
     Movie findByName(String name);
 
@@ -24,5 +23,4 @@ public interface MovieService {
     int update(Movie movie);
 
     public Page<Movie> findJpa(Integer page, Integer size);
-//    public String findJpa(Integer page, Integer size);
 }

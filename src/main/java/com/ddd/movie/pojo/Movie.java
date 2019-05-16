@@ -1,10 +1,8 @@
 package com.ddd.movie.pojo;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-
 import javax.persistence.*;
-import java.sql.Date;
-import java.sql.Timestamp;
+import java.util.Date;
+//import java.sql.Date;
 
 @Entity
 @Table(name = "movie")

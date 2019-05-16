@@ -17,14 +17,14 @@ public class LoginController {
     @RequestMapping({"", "/"})
 //    @ResponseBody
     public String index(Model model) {
-        model.addAttribute("login", "plz login");
+        model.addAttribute("loginMessage", "plz login first");
         return "login";
     }
 
-    @RequestMapping(value = "/user", method = {RequestMethod.POST, RequestMethod.GET})
+    @RequestMapping(value = "/user", method = {RequestMethod.POST})
     public String login(@RequestParam(value = "username", required = false) String username, @RequestParam(value = "password", required = false) String userpwd, Model model) {
         if (username == null && userpwd == null) {
-            model.addAttribute("Login", "null");
+            model.addAttribute("loginMessage", "nothing input");
             return "login";
         } else {
             Subject subject = SecurityUtils.getSubject();
@@ -32,22 +32,22 @@ public class LoginController {
                 UsernamePasswordToken token = new UsernamePasswordToken(username, userpwd);
                 try {
                     subject.login(token);
-                    model.addAttribute("Login", "Login Success");
+//                    model.addAttribute("loginMessage", "Login Success");
                 } catch (UnknownAccountException e) {
-                    model.addAttribute("LoginMessage", e.getMessage());
+                    model.addAttribute("loginMessage", e.getMessage());
                     return "login";
                 } catch (IncorrectCredentialsException e) {
-                    model.addAttribute("LoginMessage", e.getMessage());
+                    model.addAttribute("loginMessage", e.getMessage());
                     return "login";
                 } catch (LockedAccountException e) {
-                    model.addAttribute("LoginMessage", e.getMessage());
+                    model.addAttribute("loginMessage", e.getMessage());
                     return "login";
                 } catch (AuthenticationException e) {
-                    model.addAttribute("LoginMessage", e.getMessage());
+                    model.addAttribute("loginMessage", e.getMessage());
                     return "login";
                 }
             }
+            return "redirect:/";
         }
-        return "home";
     }
 }

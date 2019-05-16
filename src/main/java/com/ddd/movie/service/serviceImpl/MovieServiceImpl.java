@@ -6,7 +6,6 @@ import com.ddd.movie.pojo.Movie;
 import com.ddd.movie.service.MovieService;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
@@ -22,7 +21,7 @@ import java.util.List;
 public class MovieServiceImpl implements MovieService {
     @Resource(name = "movieDao")
     MovieDao movieDao;
-    @Autowired
+    @Resource(name = "movieMapper")
     MovieMapper movieMapper;
 
     @Override
@@ -30,8 +29,7 @@ public class MovieServiceImpl implements MovieService {
     public PageInfo findAllMybatis(Integer page, Integer size) {
         PageHelper.startPage(page, size);
         List<Movie> pagelist = movieMapper.findAll();
-        PageInfo pageInfo = new PageInfo<>(pagelist);
-        return pageInfo;
+        return new PageInfo<>(pagelist);
     }
 
     @Override
@@ -42,8 +40,8 @@ public class MovieServiceImpl implements MovieService {
 
     @Override
     @Cacheable(key = "#id")
-    public Movie getById(int id) {
-        return getById(id);
+    public Movie findById(int id) {
+        return movieDao.findById(id).orElse(new Movie());
     }
 
     @Override
