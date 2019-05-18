@@ -9,7 +9,6 @@ import com.github.pagehelper.PageInfo;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
-import org.springframework.cache.annotation.Caching;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
@@ -57,20 +56,22 @@ public class MovieServiceImpl implements MovieService {
     }
 
     @Override
-    @Caching(evict = {
-            @CacheEvict(key = "#movie.getId()"),
-            @CacheEvict(key = "#movie.getName()"),
-            @CacheEvict(key = "'all'")})
+//    @Caching(evict = {
+//            @CacheEvict(key = "#movie.getId()"),
+//            @CacheEvict(key = "#movie.getName()"),
+//            @CacheEvict(key = "'all'")})
+    @CacheEvict(allEntries = true)
     public int delete(Movie movie) {
         movieDao.delete(movie);
         return 0;
     }
 
     @Override
-    @Caching(evict = {
-            @CacheEvict(key = "#movie.getId()"),
-            @CacheEvict(key = "#movie.getName()"),
-            @CacheEvict(key = "'all'")})
+//    @Caching(evict = {
+//            @CacheEvict(key = "#movie.getId()"),
+//            @CacheEvict(key = "#movie.getName()"),
+//            @CacheEvict(key = "'all'")})
+    @CacheEvict(allEntries = true)
     public int update(Movie movie) {
         Movie saved = movieDao.saveAndFlush(movie);
         return saved.getId();

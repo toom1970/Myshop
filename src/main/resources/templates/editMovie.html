@@ -8,23 +8,23 @@
 </head>
 <body>
 <div class="col-sm-3"></div>
-<form class="form-horizontal col-sm-6" style="margin-top: 40px">
+<form class="form-horizontal col-sm-6" style="margin-top: 40px" th:action="@{'/edit/'+${movie.getId()}}">
     <div class="form-group">
         <label for="inputName" class="col-sm-2 control-label">Movie Name</label>
         <div class="col-sm-10">
-            <input type="text" class="form-control" id="inputName" th:placeholder="${movie.getName()}">
+            <input type="text" class="form-control" id="inputName" name="name" th:placeholder="${movie.getName()}">
         </div>
     </div>
     <div class="form-group">
         <label for="inputDirector" class="col-sm-2 control-label">Director</label>
         <div class="col-sm-10">
-            <input type="text" class="form-control" id="inputDirector" th:placeholder="${movie.getDirector()}">
+            <input type="text" class="form-control" id="inputDirector"name="director" th:placeholder="${movie.getDirector()}">
         </div>
     </div>
     <div class="form-group">
         <label for="inputReleaseTime" class="col-sm-2 control-label">ReleaseTime</label>
         <div class="col-sm-10">
-            <input type="date" class="form-control" id="inputReleaseTime">
+            <input type="date" class="form-control" id="inputReleaseTime" name="releasetime" th:value="${{movie.getReleaseDate()}}">
         </div>
     </div>
     <div class="form-group" style="margin-top: 30px">
@@ -36,12 +36,6 @@
 </form>
 <div class="col-sm-3"></div>
 </body>
-<script th:inline="javascript">
-    var inputdate = document.getElementById("inputReleaseTime");
-    var date = [[#{movie.releaseTime}]]
-    var dateString = date.getFullYear() + "/" + (date.getMonth() + 1) + "/" + date.getDate();
-    inputdate.value = dateString;
-</script>
 <script src="https://code.jquery.com/jquery.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js"
         integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"

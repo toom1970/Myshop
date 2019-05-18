@@ -10,6 +10,7 @@ import java.util.List;
 @Mapper
 @Repository("movieMapper")
 public interface MovieMapper {
+
     @Select("select * from movie")
     List<Movie> findAll();
 }

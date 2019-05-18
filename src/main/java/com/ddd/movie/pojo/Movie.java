@@ -1,6 +1,10 @@
 package com.ddd.movie.pojo;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.springframework.format.annotation.DateTimeFormat;
+
 import javax.persistence.*;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 //import java.sql.Date;
 
@@ -44,12 +48,30 @@ public class Movie {
 
     @Basic
     @Column(name = "releasedate")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     public Date getReleaseDate() {
         return releaseDate;
     }
 
     public void setReleaseDate(Date releaseDate) {
         this.releaseDate = releaseDate;
+    }
+
+    @Transient
+    @JsonIgnore
+    public String getFormatDate() {
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        return format.format(releaseDate);
+    }
+
+    public Movie(int id, String name, String director, Date releaseDate, String formatDate) {
+        this.id = id;
+        this.name = name;
+        this.director = director;
+        this.releaseDate = releaseDate;
+    }
+
+    public Movie() {
     }
 
     @Override
