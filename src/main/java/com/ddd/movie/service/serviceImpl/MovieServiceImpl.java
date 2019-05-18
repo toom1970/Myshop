@@ -67,10 +67,6 @@ public class MovieServiceImpl implements MovieService {
     }
 
     @Override
-//    @Caching(evict = {
-//            @CacheEvict(key = "#movie.getId()"),
-//            @CacheEvict(key = "#movie.getName()"),
-//            @CacheEvict(key = "'all'")})
     @CacheEvict(allEntries = true)
     public int update(Movie movie) {
         Movie saved = movieDao.saveAndFlush(movie);
