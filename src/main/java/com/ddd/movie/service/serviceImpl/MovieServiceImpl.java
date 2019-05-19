@@ -50,6 +50,7 @@ public class MovieServiceImpl implements MovieService {
     }
 
     @Override
+    @CacheEvict(allEntries = true)
     public int add(Movie movie) {
         Movie saved = movieDao.saveAndFlush(movie);
         return saved.getId();

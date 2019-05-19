@@ -34,7 +34,7 @@ public class HomeController {
         return "home";
     }
 
-    @RequestMapping(value = "/edit/{id}", method = RequestMethod.GET)
+    @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
 //    @ResponseBody
     public String editMovie(@PathVariable("id") int id, @RequestParam(value = "name", required = false) String name, @RequestParam(value = "director", required = false) String director, @RequestParam(value = "releasetime", required = false) String releaseTime, Model model) {
         Movie movie = movieService.findById(id);
@@ -61,7 +61,7 @@ public class HomeController {
         }
     }
 
-    @RequestMapping(value = "/del/{id}")
+    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
     public String delMovie(@PathVariable("id") int id) {
         Movie movie = movieService.findById(id);
         if (movie != null)
@@ -69,14 +69,19 @@ public class HomeController {
         return "redirect:/";
     }
 
-    @RequestMapping(value = "/add/{id}")
-    public String addMovie(Movie movie) {
-        movieService.add(movie);
-        return "redirect:/";
-    }
-
     @RequestMapping(value = "/add")
-    public String addMoviePage() {
-        return "addPage";
+    public String addMoviePage(@RequestParam(value = "name", required = false) String name, @RequestParam(value = "director", required = false) String director, @RequestParam(value = "releasetime", required = false) String releaseTime) {
+        if (name == null && director == null && releaseTime == null) {
+            return "addMovie";
+        } else {
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            try {
+                Movie movie = new Movie(name, director, dateFormat.parse(releaseTime));
+                movieService.add(movie);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            return "redirect:/";
+        }
     }
 }

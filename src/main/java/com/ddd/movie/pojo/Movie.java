@@ -74,6 +74,12 @@ public class Movie {
     public Movie() {
     }
 
+    public Movie(String name, String director, Date releaseDate) {
+        this.name = name;
+        this.director = director;
+        this.releaseDate = releaseDate;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

@@ -25,13 +25,13 @@
             <td th:text="${m.getFormatDate()}"></td>
             <!--            <td th:text="${m.getReleaseDate()}"></td>-->
             <td>
-                <button type="button" class="btn btn-default btn-sm btn-info"
+                <button type="button" class="btn btn-default btn-sm btn-info edit"
                         th:onclick="'javascript:jumpEdit('+${m.getId()}+')'">
                     <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span> Edit
                 </button>
                 <button type="button" class="btn btn-default btn-sm btn-danger"
                         th:onclick="'javascript:jumpDel('+${m.getId()}+')'">
-                    <span class="glyphicon glyphicon-trash" aria-hidden="true"></span> Del
+                    <span class="glyphicon glyphicon-trash delete" aria-hidden="true"></span> Del
                 </button>
             </td>
         </tr>
@@ -44,10 +44,10 @@
         <li><a th:if="${pages.isIsFirstPage()}" th:href="@{'?page='+${pages.getPageNum()}}">&laquo;</a></li>
         <li><a th:unless="${pages.isIsFirstPage()}" th:href="@{'?page='+${pages.getPageNum()-1}}">&laquo;</a></li>
         <li><a th:href="@{'?page='+${pages.getPageNum()}}" th:text="${pages.getPageNum()}">1</a></li>
-        <li><a href=" #">2</a></li>
-        <li><a href="#">3</a></li>
-        <li><a href="#">4</a></li>
-        <li><a href="#">5</a></li>
+        <li><a th:if="${pages.getPages()}>=2" th:href="@{'?page='+${pages.getPageNum()}}+1">2</a></li>
+        <li><a th:if="${pages.getPages()}>=3" th:href="@{'?page='+${pages.getPageNum()}}+2">3</a></li>
+        <li><a th:if="${pages.getPages()}>=4" th:href="@{'?page='+${pages.getPageNum()}}+3">4</a></li>
+        <li><a th:if="${pages.getPages()}>=5" th:href="@{'?page='+${pages.getPageNum()}}+4">5</a></li>
         <li><a th:if="${pages.isIsLastPage()}" th:href="@{'?page='+${pages.getPageNum()}}">&raquo;</a></li>
         <li><a th:unless="${pages.isIsLastPage()}" th:href="@{'?page='+${pages.getPageNum()+1}}">&raquo;</a></li>
     </ul>
@@ -55,7 +55,11 @@
 <div class="text-center">
     <input th:unless="${isLogin}" type="button" class="btn btn-success" value="login" onclick=javascrtpt:jump()>
     <input th:if="${isLogin}" type="button" class="btn btn-success" value="logout" onclick=javascrtpt:jumpLogout()>
+    <input th:unless="${isLogin}" type="button" class="btn btn-success" value="Add" onclick=javascrtpt:jumpAdd()>
 </div>
+<form id="formrestful" action="" method="POST">
+    <input id="inputrestful" type="hidden" name="_method" value="">
+</form>
 </body>
 <script>
     function jump() {
@@ -66,14 +70,24 @@
         window.location.href = "/movie/logout";
     }
 
+    function jumpAdd() {
+        window.location.href = "/movie/add";
+    }
+
     function jumpDel(id) {
-        window.location.href = "/movie/del/" + id;
+        var formdel = document.getElementById("formrestful");
+        var inputvalue = document.getElementById("inputrestful");
+        inputvalue.value = "DELETE";
+        formdel.action = "/movie/" + id;
+        formdel.submit();
     }
 
     function jumpEdit(id) {
-        var href = "/movie/edit/" + id;
-
-        window.location.href = "/movie/edit/" + id;
+        var formdel = document.getElementById("formrestful");
+        var inputvalue = document.getElementById("inputrestful");
+        inputvalue.value = "PUT";
+        formdel.action = "/movie/" + id;
+        formdel.submit();
     }
 </script>
 <script src="https://code.jquery.com/jquery.js"></script>
