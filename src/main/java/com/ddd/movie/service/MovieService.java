@@ -10,7 +10,7 @@ import java.util.Map;
 public interface MovieService {
     List<Movie> findAll();
 
-    PageInfo findAllMybatis(Integer page, Integer size);
+    PageInfo findPageByMybatis(Integer page, Integer size);
 
     Movie findById(int id);
 
@@ -22,5 +22,5 @@ public interface MovieService {
 
     int update(Movie movie);
 
-    public Page<Movie> findJpa(Integer page, Integer size);
+    Page<Movie> findPageByJpa(Integer page, Integer size);
 }

@@ -21,21 +21,18 @@ import java.util.logging.Logger;
 public class MovieController {
     @Resource(name = "movieService")
     MovieService movieService;
-    @Resource(name = "releaseInfoMapper")
-    ReleaseInfoMapper releaseInfoMapper;
     Gson gson = new Gson();
     private Logger logger = Logger.getLogger("HomeController");
 
-    @ResponseBody
+    //    @ResponseBody
     @RequestMapping({"", "/"})
     public String index(@RequestParam(value = "page", required = false, defaultValue = "1") Integer page, Model model) {
-        PageInfo pagesList = movieService.findAllMybatis(page, 5);
-        model.addAttribute("movies", pagesList.getList());
-        model.addAttribute("pages", pagesList);
+        PageInfo pageinfo = movieService.findPageByMybatis(page, 5);
+        model.addAttribute("movies", pageinfo.getList());
+        model.addAttribute("pages", pageinfo);
         Subject subject = SecurityUtils.getSubject();
         model.addAttribute("isLogin", subject.isAuthenticated());
-//        return "home";
-        return gson.toJson(releaseInfoMapper.findAll());
+        return "home";
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.PUT)

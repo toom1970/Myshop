@@ -25,7 +25,7 @@ public class MovieServiceImpl implements MovieService {
 
     @Override
     @Cacheable(key = "'page'+#page")
-    public PageInfo findAllMybatis(Integer page, Integer size) {
+    public PageInfo findPageByMybatis(Integer page, Integer size) {
         PageHelper.startPage(page, size);
         List<Movie> pagelist = movieMapper.findAll();
         return new PageInfo<>(pagelist);
@@ -46,7 +46,7 @@ public class MovieServiceImpl implements MovieService {
     @Override
     @Cacheable(key = "#name")
     public Movie findByName(String name) {
-        return findByName(name);
+        return movieDao.findByName(name);
     }
 
     @Override
@@ -75,7 +75,7 @@ public class MovieServiceImpl implements MovieService {
     }
 
     @Override
-    public Page<Movie> findJpa(Integer page, Integer size) {
+    public Page<Movie> findPageByJpa(Integer page, Integer size) {
         if (null == page) {
             page = 0;
         }
