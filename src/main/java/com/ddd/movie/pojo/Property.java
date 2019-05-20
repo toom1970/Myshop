@@ -7,6 +7,7 @@ import javax.persistence.*;
 public class Property {
     private int id;
     private String name;
+    private PropertyValue value;
 
     @Id
     @Column(name = "id")
@@ -26,6 +27,16 @@ public class Property {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    @OneToOne
+    @JoinColumn(name = "pid", referencedColumnName = "id")
+    public PropertyValue getValue() {
+        return value;
+    }
+
+    public void setValue(PropertyValue value) {
+        this.value = value;
     }
 
     @Override

@@ -1,5 +1,6 @@
 package com.ddd.movie.controller;
 
+import com.ddd.movie.mapper.ReleaseInfoMapper;
 import com.ddd.movie.pojo.Movie;
 import com.ddd.movie.service.MovieService;
 import com.github.pagehelper.PageInfo;
@@ -17,13 +18,15 @@ import java.util.Date;
 import java.util.logging.Logger;
 
 @Controller
-public class HomeController {
+public class MovieController {
     @Resource(name = "movieService")
     MovieService movieService;
+    @Resource(name = "releaseInfoMapper")
+    ReleaseInfoMapper releaseInfoMapper;
     Gson gson = new Gson();
     private Logger logger = Logger.getLogger("HomeController");
 
-    //    @ResponseBody
+    @ResponseBody
     @RequestMapping({"", "/"})
     public String index(@RequestParam(value = "page", required = false, defaultValue = "1") Integer page, Model model) {
         PageInfo pagesList = movieService.findAllMybatis(page, 5);
@@ -31,7 +34,8 @@ public class HomeController {
         model.addAttribute("pages", pagesList);
         Subject subject = SecurityUtils.getSubject();
         model.addAttribute("isLogin", subject.isAuthenticated());
-        return "home";
+//        return "home";
+        return gson.toJson(releaseInfoMapper.findAll());
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
@@ -39,9 +43,7 @@ public class HomeController {
     public String editMovie(@PathVariable("id") int id, @RequestParam(value = "name", required = false) String name, @RequestParam(value = "director", required = false) String director, @RequestParam(value = "releasetime", required = false) String releaseTime, Model model) {
         Movie movie = movieService.findById(id);
         if (name == null && director == null && releaseTime == null) {
-//            Movie movie = movieService.findById(id);
             model.addAttribute("movie", movie);
-//        return gson.toJson(movie);
             return "editMovie";
         } else {
             if (!name.equals(""))

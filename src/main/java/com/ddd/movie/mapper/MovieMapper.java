@@ -13,4 +13,7 @@ public interface MovieMapper {
 
     @Select("select * from movie")
     List<Movie> findAll();
+
+    @Select("select * from movie where id = #{id}")
+    Movie findMovieById(int id);
 }
