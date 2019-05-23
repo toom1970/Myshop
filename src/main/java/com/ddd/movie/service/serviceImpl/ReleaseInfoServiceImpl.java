@@ -26,4 +26,9 @@ public class ReleaseInfoServiceImpl implements ReleaseInfoService {
     public ReleaseInfo findById(int id) {
         return releaseInfoMapper.findById(id);
     }
+
+    @Override
+    public List<ReleaseInfo> findByMovieIdAndCinemaId(int mid, int cid) {
+        return releaseInfoMapper.findByMovieIdAndCinemaId(mid, cid);
+    }
 }

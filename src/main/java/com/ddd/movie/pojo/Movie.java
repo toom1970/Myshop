@@ -4,13 +4,14 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 //import java.sql.Date;
 
 @Entity
 @Table(name = "movie")
-public class Movie {
+public class Movie implements Serializable {
     private int id;
     private String name;
     private String director;

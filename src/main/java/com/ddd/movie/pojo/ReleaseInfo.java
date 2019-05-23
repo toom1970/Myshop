@@ -1,8 +1,9 @@
 package com.ddd.movie.pojo;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class ReleaseInfo {
+public class ReleaseInfo implements Serializable {
     private int id;
     private Movie movie;
     private Cinema cinema;

@@ -1,10 +1,11 @@
 package com.ddd.movie.pojo;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 @Entity
 @Table(name = "cinema")
-public class Cinema {
+public class Cinema implements Serializable {
     private int id;
     private String name;
     private String area;

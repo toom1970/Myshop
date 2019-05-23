@@ -1,5 +1,7 @@
 package com.ddd.movie.pojo;
 
+import org.hibernate.annotations.Fetch;
+
 import javax.persistence.*;
 import java.io.Serializable;
 

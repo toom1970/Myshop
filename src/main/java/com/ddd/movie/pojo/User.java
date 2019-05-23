@@ -1,5 +1,7 @@
 package com.ddd.movie.pojo;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Set;
@@ -55,8 +57,9 @@ public class User implements Serializable {
         this.salt = salt;
     }
 
-    @OneToMany
+    @OneToMany(fetch = FetchType.EAGER)
     @JoinColumn(name = "uid")
+    @JsonIgnore
     public Set<Role> getRoles() {
         return roles;
     }
