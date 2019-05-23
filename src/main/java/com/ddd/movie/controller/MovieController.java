@@ -35,7 +35,7 @@ public class MovieController {
         return "home";
     }
 
-    @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
+    @RequestMapping(value = "/{id}", method = {RequestMethod.PUT,RequestMethod.GET})
 //    @ResponseBody
     public String editMovie(@PathVariable("id") int id, @RequestParam(value = "name", required = false) String name, @RequestParam(value = "director", required = false) String director, @RequestParam(value = "releasetime", required = false) String releaseTime, Model model) {
         Movie movie = movieService.findById(id);

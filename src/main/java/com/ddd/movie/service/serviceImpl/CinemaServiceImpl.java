@@ -21,7 +21,7 @@ public class CinemaServiceImpl implements CinemaService {
     @Override
     public PageInfo findPageByMybatis(Integer page, Integer size) {
         PageHelper.startPage(page, size);
-        List<Cinema> pagelist = cinemaMapper.findAll();
+        List<Cinema> pagelist = cinemaDao.findAll();
         return new PageInfo<>(pagelist);
     }
 

@@ -57,4 +57,14 @@ public class Cinema implements Serializable {
     public void setService(String service) {
         this.service = service;
     }
+
+    public Cinema(String name, String area, String contactNumber, String service) {
+        this.name = name;
+        this.area = area;
+        this.contactNumber = contactNumber;
+        this.service = service;
+    }
+
+    public Cinema() {
+    }
 }

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
-    <title>Movie</title>
+    <title>Cinema</title>
 </head>
 <body>
 <div class="table-responsive">
@@ -12,25 +12,26 @@
         <tr class="active">
             <th>ID</th>
             <th>NAME</th>
-            <th>DIRECTOR</th>
-            <th>DATE</th>
+            <th>AREA</th>
+            <th>CONTACT NUMBER</th>
+            <th>SERVICE</th>
             <th>MANAGER</th>
         </tr>
         </thead>
         <tbody>
-        <tr th:each="m: ${movies}">
-            <td th:text="${m.getId()}" id="mid"></td>
-            <td th:text="${m.getName()}"></td>
-            <td th:text="${m.getDirector()}"></td>
-            <td th:text="${m.getFormatDate()}"></td>
-            <!--            <td th:text="${m.getReleaseDate()}"></td>-->
+        <tr th:each="c: ${cinemas}">
+            <td th:text="${c.getId()}"></td>
+            <td th:text="${c.getName()}"></td>
+            <td th:text="${c.getArea()}"></td>
+            <td th:text="${c.getContactNumber()}"></td>
+            <td th:text="${c.getService()}">service</td>
             <td>
                 <button type="button" class="btn btn-default btn-sm btn-info edit"
-                        th:onclick="'javascript:jumpEdit('+${m.getId()}+')'">
+                        th:onclick="'javascript:jumpEdit('+${c.getId()}+')'">
                     <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span> Edit
                 </button>
                 <button type="button" class="btn btn-default btn-sm btn-danger"
-                        th:onclick="'javascript:jumpDel('+${m.getId()}+')'">
+                        th:onclick="'javascript:jumpDel('+${c.getId()}+')'">
                     <span class="glyphicon glyphicon-trash delete" aria-hidden="true"></span> Del
                 </button>
             </td>
@@ -44,10 +45,10 @@
         <li><a th:if="${pages.isIsFirstPage()}" th:href="@{'?page='+${pages.getPageNum()}}">&laquo;</a></li>
         <li><a th:unless="${pages.isIsFirstPage()}" th:href="@{'?page='+${pages.getPageNum()-1}}">&laquo;</a></li>
         <li><a th:href="@{'?page='+${pages.getPageNum()}}" th:text="${pages.getPageNum()}">1</a></li>
-        <li><a th:if="${pages.getPages()}>=2" th:href="@{'?page='+${pages.getPageNum()+1}}">2</a></li>
-        <li><a th:if="${pages.getPages()}>=3" th:href="@{'?page='+${pages.getPageNum()+2}}">3</a></li>
-        <li><a th:if="${pages.getPages()}>=4" th:href="@{'?page='+${pages.getPageNum()+3}}">4</a></li>
-        <li><a th:if="${pages.getPages()}>=5" th:href="@{'?page='+${pages.getPageNum()+$}}">5</a></li>
+        <li><a th:if="${pages.getPages()}>=2" th:href="@{'?page='+${pages.getPageNum()}}+1">2</a></li>
+        <li><a th:if="${pages.getPages()}>=3" th:href="@{'?page='+${pages.getPageNum()}}+2">3</a></li>
+        <li><a th:if="${pages.getPages()}>=4" th:href="@{'?page='+${pages.getPageNum()}}+3">4</a></li>
+        <li><a th:if="${pages.getPages()}>=5" th:href="@{'?page='+${pages.getPageNum()}}+4">5</a></li>
         <li><a th:if="${pages.isIsLastPage()}" th:href="@{'?page='+${pages.getPageNum()}}">&raquo;</a></li>
         <li><a th:unless="${pages.isIsLastPage()}" th:href="@{'?page='+${pages.getPageNum()+1}}">&raquo;</a></li>
     </ul>
@@ -71,14 +72,14 @@
     }
 
     function jumpAdd() {
-        window.location.href = "/movie/add";
+        window.location.href = "/movie/cinema/add";
     }
 
     function jumpDel(id) {
         var formdel = document.getElementById("formrestful");
         var inputvalue = document.getElementById("inputrestful");
         inputvalue.value = "DELETE";
-        formdel.action = "/movie/" + id;
+        formdel.action = "/movie/cinema/" + id;
         formdel.submit();
     }
 
@@ -86,7 +87,7 @@
         var formdel = document.getElementById("formrestful");
         var inputvalue = document.getElementById("inputrestful");
         inputvalue.value = "PUT";
-        formdel.action = "/movie/" + id;
+        formdel.action = "/movie/cinema/" + id;
         formdel.submit();
     }
 </script>

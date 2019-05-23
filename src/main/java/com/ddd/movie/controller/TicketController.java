@@ -1,6 +1,5 @@
 package com.ddd.movie.controller;
 
-import com.ddd.movie.dao.UserDao;
 import com.ddd.movie.pojo.Order;
 import com.ddd.movie.pojo.ReleaseInfo;
 import com.ddd.movie.pojo.User;
@@ -60,6 +59,7 @@ public class TicketController {
         }
     }
 
+    //0: Cancel  1: waiting 2: confirmed
     @RequestMapping("/order/confirm")
     @ResponseBody
     public String confirm(@RequestParam(name = "isConfirm", required = false) int isConfirm, Model model) {
@@ -70,6 +70,7 @@ public class TicketController {
             model.addAttribute("order", order);
             return "confirmPage";
         } else if (isConfirm == 2) {
+            order.setStatus(2);
             orderService.add(order);
             session.removeAttribute("order");
             return "redirect:/";

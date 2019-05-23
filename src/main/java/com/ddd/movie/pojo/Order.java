@@ -10,6 +10,7 @@ public class Order implements Serializable {
     private int number;
     private double price;
     private int status;
+    //0: failed 1: waiting 2:success
 
     public long getId() {
         return id;
