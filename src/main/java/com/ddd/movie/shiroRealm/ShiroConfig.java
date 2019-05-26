@@ -1,5 +1,8 @@
 package com.ddd.movie.shiroRealm;
 
+import com.ddd.movie.pojo.Order;
+import com.ddd.movie.service.OrderService;
+import com.ddd.movie.service.serviceImpl.OrderServiceImpl;
 import org.apache.shiro.mgt.SecurityManager;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.session.SessionListener;
@@ -87,12 +90,18 @@ public class ShiroConfig {
 
             @Override
             public void onStop(Session session) {
-
+                if (session.getAttribute("order") != null) {
+                    OrderService orderService = new OrderServiceImpl();
+                    orderService.add((Order) session.getAttribute("order"));
+                }
             }
 
             @Override
             public void onExpiration(Session session) {
-
+                if (session.getAttribute("order") != null) {
+                    OrderService orderService = new OrderServiceImpl();
+                    orderService.add((Order) session.getAttribute("order"));
+                }
             }
         };
     }

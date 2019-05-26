@@ -21,7 +21,7 @@ public class LoginController {
         return "login";
     }
 
-    @RequestMapping(value = "/user", method = {RequestMethod.POST})
+    @RequestMapping(value = "/user", method = {RequestMethod.POST,RequestMethod.GET})
     public String login(@RequestParam(value = "username", required = false) String username, @RequestParam(value = "password", required = false) String userpwd, Model model) {
         if (username == null && userpwd == null) {
             model.addAttribute("loginMessage", "nothing input");

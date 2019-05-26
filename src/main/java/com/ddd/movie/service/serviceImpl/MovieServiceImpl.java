@@ -40,11 +40,11 @@ public class MovieServiceImpl implements MovieService {
     @Override
     @Cacheable(key = "#id")
     public Movie findById(int id) {
-        return movieDao.findById(id).orElse(new Movie());
+        return movieMapper.findMovieById(id);
     }
 
     @Override
-    @Cacheable(key = "#name")
+//    @Cacheable(key = "#name")
     public Movie findByName(String name) {
         return movieDao.findByName(name);
     }

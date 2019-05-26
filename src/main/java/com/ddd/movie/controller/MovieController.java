@@ -5,6 +5,7 @@ import com.ddd.movie.pojo.Movie;
 import com.ddd.movie.service.MovieService;
 import com.github.pagehelper.PageInfo;
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
 import org.springframework.stereotype.Controller;
@@ -35,7 +36,14 @@ public class MovieController {
         return "home";
     }
 
-    @RequestMapping(value = "/{id}", method = {RequestMethod.PUT,RequestMethod.GET})
+    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
+    public String browseMovie(@PathVariable("id") int id, Model model) {
+        Movie movie = movieService.findById(id);
+        model.addAttribute("movie", movie);
+        return "movieDetails";
+    }
+
+    @RequestMapping(value = "/{id}", method = {RequestMethod.PUT})
 //    @ResponseBody
     public String editMovie(@PathVariable("id") int id, @RequestParam(value = "name", required = false) String name, @RequestParam(value = "director", required = false) String director, @RequestParam(value = "releasetime", required = false) String releaseTime, Model model) {
         Movie movie = movieService.findById(id);

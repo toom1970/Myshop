@@ -6,7 +6,10 @@ import org.springframework.format.annotation.DateTimeFormat;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
+import java.util.Set;
 //import java.sql.Date;
 
 @Entity
@@ -16,6 +19,15 @@ public class Movie implements Serializable {
     private String name;
     private String director;
     private Date releaseDate;
+    private String writer;
+    private String starring;
+    private String type;
+    private String area;
+    private String language;
+    private String length;
+    private String otherName;
+    private List<Tag> tags;
+    private String introduction;
 
     @Id
     @Column(name = "id")
@@ -25,6 +37,34 @@ public class Movie implements Serializable {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    @OneToMany(fetch = FetchType.EAGER)
+    @JoinColumn(name = "mid")
+    public List<Tag> getTags() {
+        return tags;
+    }
+
+    public void setTags(List<Tag> tags) {
+        this.tags = tags;
+    }
+
+    @Column(name = "introduction")
+    public String getIntroduction() {
+        return introduction;
+    }
+
+    public void setIntroduction(String introduction) {
+        this.introduction = introduction;
+    }
+
+    @Column(name = "type")
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 
     @Basic
@@ -63,6 +103,108 @@ public class Movie implements Serializable {
     public String getFormatDate() {
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         return format.format(releaseDate);
+    }
+
+    @Column(name = "writer")
+    public String getWriter() {
+        return writer;
+    }
+
+    public void setWriter(String writer) {
+        this.writer = writer;
+    }
+
+    @Transient
+    @JsonIgnore
+    public List<String> getWriterList() {
+        return Arrays.asList(writer.split(","));
+    }
+
+    public void setWriterList(List<String> writerList) {
+        StringBuilder stringBuilder = new StringBuilder();
+        String sp = "";
+        for (String s : writerList) {
+            stringBuilder.append(sp).append(s);
+            sp = ",";
+        }
+        this.writer = stringBuilder.toString();
+    }
+
+    @Column(name = "starring")
+    public String getStarring() {
+        return starring;
+    }
+
+    public void setStarring(String starring) {
+        this.starring = starring;
+    }
+
+    @Transient
+    @JsonIgnore
+    public List<String> getStarringList() {
+        return Arrays.asList(starring.split(","));
+    }
+
+    public void setStarringList(List<String> starringList) {
+        StringBuilder stringBuilder = new StringBuilder();
+        String sp = "";
+        for (String s : starringList) {
+            stringBuilder.append(sp).append(s);
+            sp = ",";
+        }
+        this.starring = stringBuilder.toString();
+    }
+
+    @Column(name = "area")
+    public String getArea() {
+        return area;
+    }
+
+    public void setArea(String area) {
+        this.area = area;
+    }
+
+    @Column(name = "language")
+    public String getLanguage() {
+        return language;
+    }
+
+    public void setLanguage(String language) {
+        this.language = language;
+    }
+
+    @Column(name = "length")
+    public String getLength() {
+        return length;
+    }
+
+    public void setLength(String length) {
+        this.length = length;
+    }
+
+    @Column(name = "othername")
+    public String getOtherName() {
+        return otherName;
+    }
+
+    public void setOtherName(String otherName) {
+        this.otherName = otherName;
+    }
+
+    @Transient
+    @JsonIgnore
+    public List<String> getOtherNameList() {
+        return Arrays.asList(otherName.split(","));
+    }
+
+    public void setOtherNameList(List<String> otherNameList) {
+        StringBuilder stringBuilder = new StringBuilder();
+        String sp = "";
+        for (String s : otherNameList) {
+            stringBuilder.append(sp).append(s);
+            sp = ",";
+        }
+        this.otherName = stringBuilder.toString();
     }
 
     public Movie(int id, String name, String director, Date releaseDate, String formatDate) {
