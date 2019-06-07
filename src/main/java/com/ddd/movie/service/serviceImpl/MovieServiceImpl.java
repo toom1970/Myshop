@@ -1,8 +1,10 @@
 package com.ddd.movie.service.serviceImpl;
 
 import com.ddd.movie.dao.MovieDao;
+import com.ddd.movie.dao.PhotoDao;
 import com.ddd.movie.mapper.MovieMapper;
 import com.ddd.movie.pojo.Movie;
+import com.ddd.movie.pojo.Photo;
 import com.ddd.movie.service.MovieService;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -11,10 +13,10 @@ import com.google.gson.JsonObject;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpPatch;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.util.EntityUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
@@ -31,6 +33,8 @@ public class MovieServiceImpl implements MovieService {
     MovieDao movieDao;
     @Resource(name = "movieMapper")
     MovieMapper movieMapper;
+    @Autowired
+    PhotoDao photoDao;
     Gson gson = new Gson();
 
     @Override
@@ -80,13 +84,17 @@ public class MovieServiceImpl implements MovieService {
 
     @Override
     public Movie findByName(String name) {
-        return movieDao.findByName(name);
+        return movieMapper.findMovieByName(name);
     }
 
     @Override
     @CacheEvict(allEntries = true)
     public int add(Movie movie) {
         Movie saved = movieDao.saveAndFlush(movie);
+        if (movie.getPhotos() != null) {
+            for (Photo p : movie.getPhotos())
+                photoDao.save(p);
+        }
         return saved.getId();
     }
 

@@ -1,15 +1,13 @@
 package com.ddd.movie.pojo;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
 @Table(name = "photo")
 public class Photo {
     private int id;
     private String url;
+    private int mid;
 
     @Id
     @Column(name = "id")
@@ -30,8 +28,18 @@ public class Photo {
         this.url = url;
     }
 
-    public Photo(String url) {
+    @Column(name = "mid")
+    public int getMid() {
+        return mid;
+    }
+
+    public void setMid(int mid) {
+        this.mid = mid;
+    }
+
+    public Photo(String url,int mid) {
         this.url = url;
+        this.mid = mid;
     }
 
     public Photo() {

@@ -42,6 +42,7 @@ public class Movie implements Serializable {
 
     @OneToMany(fetch = FetchType.EAGER)
     @JoinColumn(name = "mid")
+    @Transient
     public Set<Tag> getTags() {
         return tags;
     }
@@ -52,6 +53,7 @@ public class Movie implements Serializable {
 
     @OneToMany(fetch = FetchType.EAGER)
     @JoinColumn(name = "mid")
+    @Transient
     public Set<Image> getImages() {
         return images;
     }
@@ -62,6 +64,7 @@ public class Movie implements Serializable {
 
     @OneToMany(fetch = FetchType.EAGER)
     @JoinColumn(name = "mid")
+    @Transient
     public Set<Photo> getPhotos() {
         return photos;
     }

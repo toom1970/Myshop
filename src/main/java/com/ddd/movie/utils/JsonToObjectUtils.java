@@ -5,10 +5,7 @@ import com.ddd.movie.pojo.Photo;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import com.google.gson.reflect.TypeToken;
-import org.springframework.beans.factory.annotation.Autowired;
 
-import java.lang.reflect.Type;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -37,7 +34,7 @@ public class JsonToObjectUtils {
                 movie.setPhotos(new HashSet<>());
             String[] photosStr = gson.fromJson(object.get("photos"), String[].class);
             for (String s : photosStr)
-                movie.getPhotos().add(new Photo(s));
+                movie.getPhotos().add(new Photo(s,movie.getId()));
             return movie;
         } catch (Exception e) {
             e.printStackTrace();
