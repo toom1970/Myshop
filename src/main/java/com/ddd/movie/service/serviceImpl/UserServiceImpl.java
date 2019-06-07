@@ -1,5 +1,6 @@
 package com.ddd.movie.service.serviceImpl;
 
+import com.ddd.movie.mapper.UserMapper;
 import com.ddd.movie.service.UserService;
 import com.ddd.movie.dao.UserDao;
 import com.ddd.movie.pojo.User;
@@ -14,6 +15,8 @@ import java.util.List;
 public class UserServiceImpl implements UserService {
     @Resource(name = "userDao")
     UserDao userDao;
+    @Resource(name = "userMapper")
+    UserMapper userMapper;
 
     @Override
     @Cacheable(key = "'all'")
@@ -22,9 +25,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @Cacheable(key = "#id")
+//    @Cacheable(key = "#id")
     public User getById(int id) {
-        return userDao.getOne(id);
+        return userMapper.findById(id);
     }
 
     @Override

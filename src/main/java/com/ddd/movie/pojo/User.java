@@ -1,6 +1,9 @@
 package com.ddd.movie.pojo;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.apache.shiro.crypto.hash.SimpleHash;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -14,11 +17,10 @@ public class User implements Serializable {
     private String password;
     private String salt;
     private Set<Role> roles;
-//    private Set<> permissions;
 
     @Id
     @Column(name = "id")
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     public int getId() {
         return id;
     }
@@ -67,12 +69,13 @@ public class User implements Serializable {
     public void setRoles(Set<Role> roles) {
         this.roles = roles;
     }
-//
-//    public HashSet<String> getPermissions() {
-//        return permissions;
-//    }
-//
-//    public void setPermissions(HashSet<String> permissions) {
-//        this.permissions = permissions;
-//    }
+
+    public User() {
+    }
+
+    public User(String name, String password) {
+        this.name = name;
+        this.salt = name;
+        this.password = new SimpleHash("MD5", password, salt, 2).toString();
+    }
 }

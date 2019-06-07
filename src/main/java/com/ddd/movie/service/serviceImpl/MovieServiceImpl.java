@@ -6,6 +6,15 @@ import com.ddd.movie.pojo.Movie;
 import com.ddd.movie.service.MovieService;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import org.apache.http.HttpEntity;
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPatch;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.http.util.EntityUtils;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
@@ -22,6 +31,7 @@ public class MovieServiceImpl implements MovieService {
     MovieDao movieDao;
     @Resource(name = "movieMapper")
     MovieMapper movieMapper;
+    Gson gson = new Gson();
 
     @Override
     @Cacheable(key = "'page'+#page")
@@ -34,7 +44,32 @@ public class MovieServiceImpl implements MovieService {
     @Override
     @Cacheable(key = "'all'")
     public List<Movie> findAll() {
-        return movieDao.findAll();
+        CloseableHttpClient httpClient = HttpClientBuilder.create().build();
+        HttpGet httpGet = new HttpGet("https://api.douban.com/v2/movie/subject/1866479?apikey=0df993c66c0c636e29ecbb5344252a4a");
+        CloseableHttpResponse httpResponse = null;
+        try {
+            httpResponse = httpClient.execute(httpGet);
+            HttpEntity responseEntity = httpResponse.getEntity();
+            String response = EntityUtils.toString(responseEntity);
+            JsonObject jsonResponse = gson.fromJson(response, JsonObject.class);
+
+            System.out.println("响应状态为:" + httpResponse.getStatusLine());
+            System.out.println("响应内容长度为:" + responseEntity.getContentLength());
+            System.out.println(jsonResponse.toString());
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (httpResponse != null)
+                    httpResponse.close();
+                if (httpClient != null)
+                    httpClient.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return null;
+//        return movieDao.findAll();
     }
 
     @Override
@@ -44,7 +79,6 @@ public class MovieServiceImpl implements MovieService {
     }
 
     @Override
-//    @Cacheable(key = "#name")
     public Movie findByName(String name) {
         return movieDao.findByName(name);
     }

@@ -6,28 +6,29 @@ import org.springframework.format.annotation.DateTimeFormat;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
-import java.util.Set;
-//import java.sql.Date;
+import java.util.*;
 
 @Entity
 @Table(name = "movie")
 public class Movie implements Serializable {
     private int id;
-    private String name;
-    private String director;
-    private Date releaseDate;
+    private String name; //nm
+    private String director; //dir 导演
+    private Date releaseDate; //frt
     private String writer;
-    private String starring;
-    private String type;
-    private String area;
-    private String language;
-    private String length;
-    private String otherName;
-    private List<Tag> tags;
-    private String introduction;
+    private String starring; //star
+    private String type; //cat
+    private String area; //fra
+    private String language; //oriLang
+    private String length; //dur
+    private String otherName; //enm
+    private String introduction; //dra
+    private Set<Tag> tags;
+    private Set<Image> images;
+    private Set<Photo> photos;
+    private String albumImg;//封面
+    private float score;//评分
+
 
     @Id
     @Column(name = "id")
@@ -41,12 +42,50 @@ public class Movie implements Serializable {
 
     @OneToMany(fetch = FetchType.EAGER)
     @JoinColumn(name = "mid")
-    public List<Tag> getTags() {
+    public Set<Tag> getTags() {
         return tags;
     }
 
-    public void setTags(List<Tag> tags) {
+    public void setTags(Set<Tag> tags) {
         this.tags = tags;
+    }
+
+    @OneToMany(fetch = FetchType.EAGER)
+    @JoinColumn(name = "mid")
+    public Set<Image> getImages() {
+        return images;
+    }
+
+    public void setImages(Set<Image> images) {
+        this.images = images;
+    }
+
+    @OneToMany(fetch = FetchType.EAGER)
+    @JoinColumn(name = "mid")
+    public Set<Photo> getPhotos() {
+        return photos;
+    }
+
+    public void setPhotos(Set<Photo> photos) {
+        this.photos = photos;
+    }
+
+    @Column(name = "albumimg")
+    public String getAlbumImg() {
+        return albumImg;
+    }
+
+    public void setAlbumImg(String albumImg) {
+        this.albumImg = albumImg;
+    }
+
+    @Column(name = "score")
+    public float getScore() {
+        return score;
+    }
+
+    public void setScore(float score) {
+        this.score = score;
     }
 
     @Column(name = "introduction")

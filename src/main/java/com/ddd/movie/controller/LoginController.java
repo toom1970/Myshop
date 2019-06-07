@@ -1,5 +1,6 @@
 package com.ddd.movie.controller;
 
+import com.ddd.movie.pojo.User;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.subject.Subject;
@@ -15,24 +16,24 @@ import org.springframework.web.bind.annotation.ResponseBody;
 public class LoginController {
 
     @RequestMapping({"", "/"})
-//    @ResponseBody
     public String index(Model model) {
-        model.addAttribute("loginMessage", "plz login first");
+        model.addAttribute("loginMessage", "Please login first");
         return "login";
     }
 
-    @RequestMapping(value = "/user", method = {RequestMethod.POST,RequestMethod.GET})
-    public String login(@RequestParam(value = "username", required = false) String username, @RequestParam(value = "password", required = false) String userpwd, Model model) {
+    @RequestMapping(value = "/user", method = {RequestMethod.POST, RequestMethod.GET})
+    public String login(@RequestParam(value = "username", required = false) String username, @RequestParam(value = "password", required = false) String userpwd, @RequestParam(value = "rememberMe", required = false) boolean rememberMe, Model model) {
         if (username == null && userpwd == null) {
             model.addAttribute("loginMessage", "nothing input");
             return "login";
         } else {
             Subject subject = SecurityUtils.getSubject();
-            if (subject.isAuthenticated() == false) {
+            if (!subject.isAuthenticated()) {
                 UsernamePasswordToken token = new UsernamePasswordToken(username, userpwd);
+                token.setRememberMe(rememberMe);
+                System.out.println(username + userpwd + rememberMe);
                 try {
                     subject.login(token);
-//                    model.addAttribute("loginMessage", "Login Success");
                 } catch (UnknownAccountException e) {
                     model.addAttribute("loginMessage", e.getMessage());
                     return "login";
@@ -47,7 +48,11 @@ public class LoginController {
                     return "login";
                 }
             }
-            return "redirect:/";
+            User user = (User) subject.getPrincipal();
+            if (user.getRoles().isEmpty())
+                return "redirect:/";
+            else
+                return "redirect:/manage/movie";
         }
     }
 }

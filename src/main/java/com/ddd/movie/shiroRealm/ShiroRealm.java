@@ -24,17 +24,16 @@ public class ShiroRealm extends AuthorizingRealm {
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principalCollection) {
         SimpleAuthorizationInfo simpleAuthorizationInfo = new SimpleAuthorizationInfo();
-//        User user = (User) principalCollection.getPrimaryPrincipal();
-        int id = (int)principalCollection.getPrimaryPrincipal();
-        User userReal = userService.getById(id);
+        User user = (User) principalCollection.getPrimaryPrincipal();
+//        int id = (int)principalCollection.getPrimaryPrincipal();
+        User userReal = userService.getById(user.getId());
         Set<String> roles = new HashSet<>();
-        for (Role roleType : userReal.getRoles())
+        for (Role roleType : userReal.getRoles()) {
+            System.out.println(userReal.getRoles());
+            System.out.println(roleType.getRoleValue());
             roles.add(roleType.getRoleValue());
+        }
         simpleAuthorizationInfo.setRoles(roles);
-        Set<String> permissions = new HashSet<>();
-//        for (String permission : userReal.getPermissions())
-//            permissions.add(permission);
-        simpleAuthorizationInfo.setStringPermissions(permissions);
         return simpleAuthorizationInfo;
     }
 

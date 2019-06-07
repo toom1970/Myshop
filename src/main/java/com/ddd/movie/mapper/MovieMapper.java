@@ -15,7 +15,9 @@ public interface MovieMapper {
 
     @Select("select * from movie where id = #{id}")
     @Results({
-            @Result(property = "tags", column = "id", many = @Many(select = "com.ddd.movie.mapper.TagMapper.findByIdToMovie"))
+            @Result(property = "tags", column = "id", many = @Many(select = "com.ddd.movie.mapper.TagMapper.findByIdToMovie")),
+            @Result(property = "images", column = "id", many = @Many(select = "com.ddd.movie.mapper.ImageMapper.findByIdToMovie")),
+            @Result(property = "photos", column = "id", many = @Many(select = "com.ddd.movie.mapper.PhotoMapper.findByIdToMovie"))
     })
     Movie findMovieById(int id);
 }

@@ -12,7 +12,7 @@ import javax.annotation.Resource;
 import java.util.List;
 
 @Controller
-@RequestMapping("/cinema")
+@RequestMapping("/manage/cinema")
 public class CinemaController {
     @Resource(name = "cinemaService")
     CinemaService cinemaService;
@@ -25,14 +25,14 @@ public class CinemaController {
         List<Cinema> cinemaList = pageInfo.getList();
         model.addAttribute("cinemas", cinemaList);
         model.addAttribute("pages", pageInfo);
-        System.out.println(cinemaList.get(1).getService());
 //        return gson.toJson(cinemaList);
         return "cinemaHome";
     }
 
     @RequestMapping(value = "/{id}", method = {RequestMethod.PUT,RequestMethod.GET})
     public String editCinema(@PathVariable("id") int id, @RequestParam(name = "name", required = false) String name,
-                             @RequestParam(name = "area", required = false) String area, @RequestParam(name = "contactNumber", required = false) String contactNumber,
+                             @RequestParam(name = "area", required = false) String area,
+                             @RequestParam(name = "contactNumber", required = false) String contactNumber,
                              @RequestParam(name = "service", required = false) String service, Model model) {
         Cinema cinema = cinemaService.findById(id);
         if (name == null && area == null && contactNumber == null && service == null) {
@@ -48,7 +48,7 @@ public class CinemaController {
             if (!service.equals(""))
                 cinema.setService(service);
             cinemaService.update(cinema);
-            return "redirect:/cinema";
+            return "redirect:/manage/cinema";
         }
     }
 
@@ -57,12 +57,13 @@ public class CinemaController {
         Cinema cinema = cinemaService.findById(id);
         if (cinema != null)
             cinemaService.delete(cinema);
-        return "redirect:/cinema";
+        return "redirect:/manage/cinema";
     }
 
     @RequestMapping(value = "/add")
     public String addCinema(@RequestParam(name = "name", required = false) String name,
-                            @RequestParam(name = "area", required = false) String area, @RequestParam(name = "contactNumber", required = false) String contactNumber,
+                            @RequestParam(name = "area", required = false) String area,
+                            @RequestParam(name = "contactNumber", required = false) String contactNumber,
                             @RequestParam(name = "service", required = false) String service) {
         if (name == null && area == null && contactNumber == null && service == null) {
             return "addCinema";
