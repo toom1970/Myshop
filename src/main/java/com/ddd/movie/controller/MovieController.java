@@ -1,7 +1,9 @@
 package com.ddd.movie.controller;
 
 import com.ddd.movie.pojo.Movie;
+import com.ddd.movie.pojo.Photo;
 import com.ddd.movie.service.MovieService;
+import com.ddd.movie.utils.JsonToObjectUtils;
 import com.github.pagehelper.PageInfo;
 import com.google.gson.Gson;
 import org.apache.shiro.SecurityUtils;
@@ -35,19 +37,26 @@ public class MovieController {
 //        System.out.println(movie.getId() + movie.getName());
 //        for (Photo p : movie.getPhotos())
 //            System.out.println(p.getUrl());
+//        movieService.add(movie);
 //        Movie movie = movieService.findByName("阿拉丁");
 //        System.out.println(movie.getId());
+        model.addAttribute("page", page);
         return "home";
     }
 
-    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
+    @RequestMapping(value = "/{id}", method = {RequestMethod.GET})
     public String browseMovie(@PathVariable("id") int id, Model model) {
         Movie movie = movieService.findById(id);
         model.addAttribute("movie", movie);
-        return "movieDetails";
+        return "redirect:/" + id;
     }
 
-    @RequestMapping(value = "/{id}", method = {RequestMethod.PUT})
+//    @RequestMapping(value = "/{id}", method = RequestMethod.POST)
+//    public String nothing(@PathVariable("id") int id) {
+//        return null;
+//    }
+
+    @RequestMapping(value = "/edit/{id}")
 //    @ResponseBody
     public String editMovie(@PathVariable("id") int id, @RequestParam(value = "name", required = false) String name, @RequestParam(value = "director", required = false) String director, @RequestParam(value = "releasetime", required = false) String releaseTime, Model model) {
         Movie movie = movieService.findById(id);
@@ -68,20 +77,22 @@ public class MovieController {
                 }
             }
             movieService.update(movie);
-            return "redirect:/";
+            return "redirect:/manage/movie";
         }
     }
 
-    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
+    @RequestMapping(value = "/del/{id}")
     public String delMovie(@PathVariable("id") int id) {
         Movie movie = movieService.findById(id);
         if (movie != null)
             movieService.delete(movie);
-        return "redirect:/";
+        return "redirect:/manage/movie";
     }
 
     @RequestMapping(value = "/add")
-    public String addMoviePage(@RequestParam(value = "name", required = false) String name, @RequestParam(value = "director", required = false) String director, @RequestParam(value = "releasetime", required = false) String releaseTime) {
+    public String addMoviePage(@RequestParam(value = "name", required = false) String name,
+                               @RequestParam(value = "director", required = false) String director,
+                               @RequestParam(value = "releasetime", required = false) String releaseTime) {
         if (name == null && director == null && releaseTime == null) {
             return "addMovie";
         } else {
@@ -92,7 +103,7 @@ public class MovieController {
             } catch (ParseException e) {
                 e.printStackTrace();
             }
-            return "redirect:/";
+            return "redirect:/manage/movie";
         }
     }
 }

@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 public interface MovieService {
-    List<Movie> findAll();
+    List<Movie> findAll(String url);
 
     PageInfo findPageByMybatis(Integer page, Integer size);
 

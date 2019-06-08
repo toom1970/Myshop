@@ -11,4 +11,6 @@ public interface ReleaseInfoService {
     ReleaseInfo findById(int id);
 
     List<ReleaseInfo> findByMovieIdAndCinemaId(int mid, int cid);
+
+    List<ReleaseInfo> findByCinemaId(int cid);
 }

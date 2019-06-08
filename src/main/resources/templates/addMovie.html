@@ -8,7 +8,7 @@
 </head>
 <body>
 <div class="col-sm-3"></div>
-<form class="form-horizontal col-sm-6" style="margin-top: 40px" th:action="@{/add}">
+<form class="form-horizontal col-sm-6" style="margin-top: 40px" th:action="@{/manage/cinema/add}">
     <div class="form-group">
         <label for="inputName" class="col-sm-2 control-label">Movie Name</label>
         <div class="col-sm-10">
@@ -38,7 +38,7 @@
 </body>
 <script>
     function jumpBack() {
-        window.location.href = "/movie";
+        window.location.href = "/movie/manage/movie";
     }
 </script>
 <script src="https://code.jquery.com/jquery.js"></script>

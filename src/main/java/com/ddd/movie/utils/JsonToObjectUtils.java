@@ -2,6 +2,7 @@ package com.ddd.movie.utils;
 
 import com.ddd.movie.pojo.Movie;
 import com.ddd.movie.pojo.Photo;
+import com.ddd.movie.pojo.Tag;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -30,11 +31,18 @@ public class JsonToObjectUtils {
             movie.setDirector(object.get("dir").getAsString());
             movie.setIntroduction(object.get("dra").getAsString());
             movie.setAlbumImg(object.get("albumImg").getAsString());
+            double score = object.get("distributions").getAsJsonArray().get(0).getAsJsonObject().get("proportion").getAsDouble() / 10;
+            movie.setScore((float) score);
             if (movie.getPhotos() == null)
                 movie.setPhotos(new HashSet<>());
             String[] photosStr = gson.fromJson(object.get("photos"), String[].class);
             for (String s : photosStr)
-                movie.getPhotos().add(new Photo(s,movie.getId()));
+                movie.getPhotos().add(new Photo(s, movie.getId()));
+            String[] tags = object.get("cat").getAsString().split(",");
+            if (movie.getTags() == null)
+                movie.setTags(new HashSet<>());
+            for (String s : tags)
+                movie.getTags().add(new Tag(s, movie.getId()));
             return movie;
         } catch (Exception e) {
             e.printStackTrace();

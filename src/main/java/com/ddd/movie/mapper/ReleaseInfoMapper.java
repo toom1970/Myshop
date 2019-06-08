@@ -33,4 +33,12 @@ public interface ReleaseInfoMapper {
             @Result(property = "cinema", column = "cid", one = @One(select = "com.ddd.movie.mapper.CinemaMapper.findCinemaById"))
     })
     List<ReleaseInfo> findByMovieIdAndCinemaId(int mid, int cid);
+
+    @Select("select * from releaseinfo where cid = #{cid}")
+    @Results({
+            @Result(property = "id", column = "id", jdbcType = JdbcType.INTEGER),
+            @Result(property = "movie", column = "mid", one = @One(select = "com.ddd.movie.mapper.MovieMapper.findMovieById")),
+            @Result(property = "cinema", column = "cid", one = @One(select = "com.ddd.movie.mapper.CinemaMapper.findCinemaById"))
+    })
+    List<ReleaseInfo> findByCinemaId(int cid);
 }

@@ -2,15 +2,11 @@
 <html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
-    <title>臻原网-电影</title>
+    <title>臻原网-影院</title>
 
     <meta name="keywords" content="">
     <meta name="description" content="">
-    <script src="https://code.jquery.com/jquery.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js"
-            integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
-            crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="./static/css/movie.css">
+    <link rel="stylesheet" href="./static/css/cinema.css">
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
@@ -55,21 +51,17 @@
 </nav>
 <div class="container">
     <div class="row">
-        <div class="col-xs-12" style="padding:0 5px;">
-            <div class="col-xs-1-5 col-sm-4 col-xs-6 movie-item" th:each="movie:${movies}">
-                <div class="movie-item-in">
-                    <a style="position:relative;display:block;" title="" target="_blank"
-                       th:href="@{'/'+${movie.getId()}}">
-                        <img alt="" title="" th:src="${movie.getAlbumImg()}">
-                        <div class="item-hover"></div>
+
+        <div class="col-xs-12" style="padding:0 5px;" th:each="cinema:${cinemas}">
+            <a style="position:relative;display:block;" title="OAC影城" target="_blank" href=""></a>
+            <div class="met">
+                <a th:href="@{'/cinema/'+${cinema.getId()}}" target="_blank" title="OAC影城" th:text="${cinema.getName()}">OAC影城</a>
+                <div style="text-align:right;">
+                    <a href="">
                     </a>
-                    <div class="meta">
-                        <h1>
-                            <a th:href="@{'/movie/'+${movie.getId()}}" target="_blank"
-                               th:title="${movie.getName()}"><span th:text="${movie.getName()}"></span></a>
-                            <em> - <span th:text="${movie.getScore()}"></span>分</em>
-                        </h1>
-                    </div>
+                </div>
+                <div class="otherinf" th:text="${cinema.getArea()}">
+                    地址：富阳区富春街道桂花西路82号
                 </div>
             </div>
         </div>
@@ -77,15 +69,14 @@
     <!-- 分页 -->
     <div class="pager-bg">
         <ul class="pagination pagination-sm">
-            <li>
-                <a th:if="${page}>1" th:href="@{'/movie?page='+${page-1}}" th:text="上一页"></a>
-            </li>
             <li class="active">
-                <a th:text="${page}">1</a>
+                <a>1</a>
             </li>
             <li>
-                <a th:if="${nextPage}!=null" th:href="@{'/movie?page='+${nextPage}}" data-ci-pagination-page="2"
-                   rel="next" th:text="下一页"></a>
+                <a href="/movie/?page=2" data-ci-pagination-page="2">2</a>
+            </li>
+            <li>
+                <a href="/movie/?page=2" data-ci-pagination-page="2" rel="next">下一页</a>
             </li>
         </ul>
     </div>
@@ -105,7 +96,6 @@
         <em>
             ♥
             <a href=""></a>
-
         </em>
     </div>
 </footer>

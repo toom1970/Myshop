@@ -10,12 +10,24 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js"
             integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
             crossorigin="anonymous"></script>
-    <link rel="stylesheet" type="text/css" href="../static/css/detail.css">
+    <link rel="stylesheet" type="text/css" href="./static/css/detail.css">
 </head>
 <body>
 <nav>
     <div class="nav">
-        <li id="reg"><a href="/movie/login">注册</a></li>
+        <div class="nav_item">
+            <a style="text-decoration:none;" href="/movie">
+                <p>电影</p>
+                <p>Movie</p>
+            </a>
+        </div>
+        <div class="nav_item">
+            <a style="text-decoration:none;" href="/movie/cinema">
+                <p>影院</p>
+                <p>Cinema</p>
+            </a>
+        </div>
+        <li id="reg"><a href="/movie/register">注册</a></li>
         <li id="login"><a href="/movie/login/user">登录</a></li>
     </div>
 </nav>
@@ -30,10 +42,10 @@
                 <h1 th:text="${movie.getName()}"></h1>
                 <div class="row">
                     <div class="col-xs-4 padding-right-0">
-                        <a class="movie-post" href="/movie/201186.html"
+                        <a class="movie-post" href=""
                            style="display:block;position:relative;">
-                            <img class="img-thumbnail" alt="28岁未成年"
-                                 src="http://ww2.sinaimg.cn/mw690/006xTuHMgw1fbdk0yamdrj30bw0gogpv.jpg" width="100%">
+                            <img class="img-thumbnail" th:alt="${movie.getName()}"
+                                 th:src="${movie.getAlbumImg()}" width="100%">
                         </a>
                     </div>
                     <div class="col-xs-8">
@@ -48,14 +60,14 @@
                                     <a target="_blank" th:text="${movie.getDirector()}"></a>
                                 </td>
                             </tr>
-                            <tr>
-                                <td class="span2">
-                                    <span class="info-label">编剧</span>
-                                </td>
-                                <td>
-                                    <a target="_blank" th:text="${movie.getWriter()}"></a>
-                                </td>
-                            </tr>
+<!--                            <tr>-->
+<!--                                <td class="span2">-->
+<!--                                    <span class="info-label">编剧</span>-->
+<!--                                </td>-->
+<!--                                <td>-->
+<!--                                    <a target="_blank" th:text="${movie.getWriter()}"></a>-->
+<!--                                </td>-->
+<!--                            </tr>-->
                             <tr>
                                 <td class="span2">
                                     <span class="info-label">主演</span>
@@ -98,7 +110,7 @@
                                 <td class="span2">
                                     <span class="info-label">片长</span>
                                 </td>
-                                <td th:text="${movie.getLength()}"></td>
+                                <td th:text="${movie.getLength()}+分钟"></td>
                             </tr>
                             <tr>
                                 <td class="span2">
@@ -111,13 +123,12 @@
                                     <span class="info-label">评分</span>
                                 </td>
                                 <td>
-                                    <a class="score" rel="nofollow" target="_blank" href="">豆瓣 6.0</a>
-                                    /
-                                    <a class="imdb" rel="nofollow" target="_blank" href="">IMDB 6.9</a>
+                                    <span th:text="${movie.getScore()}"></span>
                                 </td>
                             </tr>
                             </tbody>
                         </table>
+                        <a href="/movie/ticket?" type="button" class="btn btn-success">购票</a>
                     </div>
                 </div>
                 <div class="row" style="margin-top:5px;">
@@ -140,81 +151,6 @@
                 </div>
                 <div class="row">
                     <div class="col-xs-12">
-                        <h2>精彩推荐</h2>
-                    </div>
-                    <div style="padding:0 10px;">
-                        <div class="col-xs-2 movie-recommened">
-                            <a style="position:relative;display:block;" target="_blank" title="何以笙箫默(2015)"
-                               href="/movie/8965.html">
-                                <img alt="何以笙箫默" src="http://ww1.sinaimg.cn/large/828dc694tw1ersje41h0qj20bx0go76j.jpg"
-                                     width="100%">
-                                <div class="item-hover"></div>
-                            </a>
-                            <a target="_blank" title="何以笙箫默(2015)" href="/movie/8965.html">
-                                <h5>何以笙箫默</h5>
-                            </a>
-                        </div>
-                        <div class="col-xs-2 movie-recommened">
-                            <a style="position:relative;display:block;" target="_blank" title="睡在我上铺的兄弟(2016)"
-                               href="/movie/175597.html">
-                                <img alt="睡在我上铺的兄弟"
-                                     src="http://ww1.sinaimg.cn/large/0069qWFHgw1f48vlbra34j30bw0gon04.jpg"
-                                     width="100%">
-                                <div class="item-hover"></div>
-                            </a>
-                            <a target="_blank" title="睡在我上铺的兄弟(2016)" href="/movie/175597.html">
-                                <h5>睡在我上铺的兄弟</h5>
-                            </a>
-                        </div>
-                        <div class="col-xs-2 movie-recommened">
-                            <a style="position:relative;display:block;" target="_blank" title="陆垚知马俐(2016)"
-                               href="/movie/183805.html">
-                                <img alt="陆垚知马俐" src="http://ww2.sinaimg.cn/large/0069qWFHjw1f5uvbz3q8bj30bx0gon2o.jpg"
-                                     width="100%">
-                                <div class="item-hover"></div>
-                            </a>
-                            <a target="_blank" title="陆垚知马俐(2016)" href="/movie/183805.html">
-                                <h5>陆垚知马俐</h5>
-                            </a>
-                        </div>
-                        <div class="col-xs-2 movie-recommened">
-                            <a style="position:relative;display:block;" target="_blank" title="泡沫之夏(2016)"
-                               href="/movie/185549.html">
-                                <img alt="泡沫之夏" src="http://ww1.sinaimg.cn/large/0069qWFHgw1f7hxgt5rb1j30bw0gowi3.jpg"
-                                     width="100%">
-                                <div class="item-hover"></div>
-                            </a>
-                            <a target="_blank" title="泡沫之夏(2016)" href="/movie/185549.html">
-                                <h5>泡沫之夏</h5>
-                            </a>
-                        </div>
-                        <div class="col-xs-2 movie-recommened">
-                            <a style="position:relative;display:block;" target="_blank" title="我最好朋友的婚礼(2016)"
-                               href="/movie/186991.html">
-                                <img alt="我最好朋友的婚礼"
-                                     src="http://ww3.sinaimg.cn/large/0069qWFHgw1f8anzvhmedj30bw0go78b.jpg"
-                                     width="100%">
-                                <div class="item-hover"></div>
-                            </a>
-                            <a target="_blank" title="我最好朋友的婚礼(2016)" href="/movie/186991.html">
-                                <h5>我最好朋友的婚礼</h5>
-                            </a>
-                        </div>
-                        <div class="col-xs-2 movie-recommened">
-                            <a style="position:relative;display:block;" target="_blank" title="大话西游3(2016)"
-                               href="/movie/188609.html">
-                                <img alt="大话西游3" src="http://ww4.sinaimg.cn/large/0069qWFHgw1f7xy20yfblj30bw0go0xn.jpg"
-                                     width="100%">
-                                <div class="item-hover"></div>
-                            </a>
-                            <a target="_blank" title="大话西游3(2016)" href="/movie/188609.html">
-                                <h5>大话西游3</h5>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-xs-12">
                         <h2>影片评论</h2>
                     </div>
                     <div class="c">
@@ -231,113 +167,13 @@
                             <div class="col-xs-12">
                                 <div class="alert-x alert-info reply-box">
                                     <strong>提示：</strong>
-                                    <a href="/movie/login">[注册]</a>
+                                    <a href="/movie/register">[注册]</a>
                                     /
                                     <a href="/movie/login/user">[登入]</a>
                                     之后才能评论
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-xs-3 sidebar" style="padding-left:15px;width:220px;padding-right:5px;">
-                <div class="row">
-                    <h3>最近更新</h3>
-                    <div class="list-group">
-                        <a class="list-group-item" target="_blank" href="/tv/193345.html">
-                            <span class="square-item-red">1</span>
-                            庭审专家
-                        </a>
-                        <a class="list-group-item" target="_blank" href="/tv/204784.html">
-                            <span class="square-item-red">2</span>
-                            定罪
-                        </a>
-                        <a class="list-group-item" target="_blank" href="/tv/199630.html">
-                            <span class="square-item-red">3</span>
-                            夏威夷特勤组 第七季
-                        </a>
-                        <a class="list-group-item" target="_blank" href="/movie/206559.html">
-                            <span class="square-item-blue">4</span>
-                            变身大盗
-                        </a>
-                        <a class="list-group-item" target="_blank" href="/movie/206548.html">
-                            <span class="square-item-blue">5</span>
-                            鸡冠蒙面
-                        </a>
-                        <a class="list-group-item" target="_blank" href="/movie/206409.html">
-                            <span class="square-item-blue">6</span>
-                            我们
-                        </a>
-                        <a class="list-group-item" target="_blank" href="/movie/206522.html">
-                            <span class="square-item-blue">7</span>
-                            秘密
-                        </a>
-                        <a class="list-group-item" target="_blank" href="/tv/76284.html">
-                            <span class="square-item-blue">8</span>
-                            百战天龙
-                        </a>
-                        <a class="list-group-item" target="_blank" href="/tv/174583.html">
-                            <span class="square-item-blue">9</span>
-                            你是我的眼
-                        </a>
-                        <a class="list-group-item" target="_blank" href="/tv/185249.html">
-                            <span class="square-item-blue">10</span>
-                            致青春
-                        </a>
-                    </div>
-                    <h3>本周精选</h3>
-                    <div class="list-group">
-                        <a class="list-group-item" title="我们-迅雷下载" target="_blank"
-                           href="/movie/206409.html">
-                            <span class="square-item-red">1</span>
-                            我们
-                        </a>
-                        <a class="list-group-item" title="魔发精灵-迅雷下载" target="_blank"
-                           href="/movie/197172.html">
-                            <span class="square-item-red">2</span>
-                            魔发精灵
-                        </a>
-                        <a class="list-group-item" title="精灵王座-迅雷下载" target="_blank"
-                           href="/movie/186878.html">
-                            <span class="square-item-red">3</span>
-                            精灵王座
-                        </a>
-                        <a class="list-group-item" title="伤物语2：热血篇-迅雷下载" target="_blank"
-                           href="/movie/205426.html">
-                            <span class="square-item-blue">4</span>
-                            伤物语2：热血篇
-                        </a>
-                        <a class="list-group-item" title="航海王之黄金城-迅雷下载" target="_blank"
-                           href="/movie/197097.html">
-                            <span class="square-item-blue">5</span>
-                            航海王之黄金城
-                        </a>
-                        <a class="list-group-item" title="迷失：消失的女人-迅雷下载" target="_blank"
-                           href="/movie/205251.html">
-                            <span class="square-item-blue">6</span>
-                            迷失：消失的女人
-                        </a>
-                        <a class="list-group-item" title="无名女尸-迅雷下载" target="_blank"
-                           href="/movie/204357.html">
-                            <span class="square-item-blue">7</span>
-                            无名女尸
-                        </a>
-                        <a class="list-group-item" title="致命恋爱-迅雷下载" target="_blank"
-                           href="/movie/204769.html">
-                            <span class="square-item-blue">8</span>
-                            致命恋爱
-                        </a>
-                        <a class="list-group-item" title="哥-迅雷下载" target="_blank"
-                           href="/movie/204696.html">
-                            <span class="square-item-blue">9</span>
-                            哥
-                        </a>
-                        <a class="list-group-item" title="塔洛-迅雷下载" target="_blank"
-                           href="/movie/171329.html">
-                            <span class="square-item-blue">10</span>
-                            塔洛
-                        </a>
                     </div>
                 </div>
             </div>
@@ -350,10 +186,8 @@
                 <br>
                 目前正在逐步删除和规避程序自动搜索采集到的不提供分享的版权影视。
             </p>
-            <p>若侵犯了您的权益，请发邮件通知站长，邮箱：service@xunyingwang.com</p>
             <em>
                 ♥
-                · VERSION: 1.3.9
             </em>
         </div>
     </footer>

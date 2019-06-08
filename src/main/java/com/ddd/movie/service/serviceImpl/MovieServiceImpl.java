@@ -2,9 +2,11 @@ package com.ddd.movie.service.serviceImpl;
 
 import com.ddd.movie.dao.MovieDao;
 import com.ddd.movie.dao.PhotoDao;
+import com.ddd.movie.dao.TagDao;
 import com.ddd.movie.mapper.MovieMapper;
 import com.ddd.movie.pojo.Movie;
 import com.ddd.movie.pojo.Photo;
+import com.ddd.movie.pojo.Tag;
 import com.ddd.movie.service.MovieService;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -35,6 +37,8 @@ public class MovieServiceImpl implements MovieService {
     MovieMapper movieMapper;
     @Autowired
     PhotoDao photoDao;
+    @Autowired
+    TagDao tagDao;
     Gson gson = new Gson();
 
     @Override
@@ -47,9 +51,9 @@ public class MovieServiceImpl implements MovieService {
 
     @Override
     @Cacheable(key = "'all'")
-    public List<Movie> findAll() {
+    public List<Movie> findAll(String url) {
         CloseableHttpClient httpClient = HttpClientBuilder.create().build();
-        HttpGet httpGet = new HttpGet("https://api.douban.com/v2/movie/subject/1866479?apikey=0df993c66c0c636e29ecbb5344252a4a");
+        HttpGet httpGet = new HttpGet(url);
         CloseableHttpResponse httpResponse = null;
         try {
             httpResponse = httpClient.execute(httpGet);
@@ -94,6 +98,10 @@ public class MovieServiceImpl implements MovieService {
         if (movie.getPhotos() != null) {
             for (Photo p : movie.getPhotos())
                 photoDao.save(p);
+        }
+        if (movie.getTags() != null) {
+            for (Tag t : movie.getTags())
+                tagDao.save(t);
         }
         return saved.getId();
     }

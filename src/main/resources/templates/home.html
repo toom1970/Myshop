@@ -20,7 +20,7 @@
         <tbody>
         <tr th:each="m: ${movies}">
             <td th:text="${m.getId()}" id="mid"></td>
-            <td th:text="${m.getName()}"></td>
+            <td><a th:text="${m.getName()}"></a></td>
             <td th:text="${m.getDirector()}"></td>
             <td th:text="${m.getFormatDate()}"></td>
             <!--            <td th:text="${m.getReleaseDate()}"></td>-->
@@ -55,11 +55,11 @@
 <div class="text-center">
     <input th:unless="${isLogin}" type="button" class="btn btn-success" value="login" onclick=javascrtpt:jump()>
     <input th:if="${isLogin}" type="button" class="btn btn-success" value="logout" onclick=javascrtpt:jumpLogout()>
-    <input th:unless="${isLogin}" type="button" class="btn btn-success" value="Add" onclick=javascrtpt:jumpAdd()>
+    <input th:if="${isLogin}" type="button" class="btn btn-success" value="Add" onclick=javascrtpt:jumpAdd()>
 </div>
-<form id="formrestful" action="" method="POST">
-    <input id="inputrestful" type="hidden" name="_method" value="">
-</form>
+<!--<form id="formRestful" action="" method="get">-->
+<!--    <input id="inputRestful" type="hidden" name="_method" value="">-->
+<!--</form>-->
 </body>
 <script>
     function jump() {
@@ -71,23 +71,25 @@
     }
 
     function jumpAdd() {
-        window.location.href = "/movie/add";
+        window.location.href = "/movie/manage/movie/add";
     }
 
     function jumpDel(id) {
-        var formdel = document.getElementById("formrestful");
-        var inputvalue = document.getElementById("inputrestful");
-        inputvalue.value = "DELETE";
-        formdel.action = "/movie/" + id;
-        formdel.submit();
+        // var formDel = document.getElementById("formRestful");
+        // var inputValue = document.getElementById("inputRestful");
+        // inputValue.value = "DELETE";
+        // formDel.action = "/movie/manages/movie/del/" + id;
+        // formDel.submit();
+        window.location.href = "/movie/manage/movie/del/" + id;
     }
 
     function jumpEdit(id) {
-        var formdel = document.getElementById("formrestful");
-        var inputvalue = document.getElementById("inputrestful");
-        inputvalue.value = "PUT";
-        formdel.action = "/movie/" + id;
-        formdel.submit();
+        // var formDel = document.getElementById("formRestful");
+        // var inputValue = document.getElementById("inputRestful");
+        // inputValue.value = "PUT";
+        // formDel.action = "/movie/manage/movie/edit/" + id;
+        // formDel.submit();
+        window.location.href = "/movie/manage/movie/edit/" + id;
     }
 </script>
 <script src="https://code.jquery.com/jquery.js"></script>

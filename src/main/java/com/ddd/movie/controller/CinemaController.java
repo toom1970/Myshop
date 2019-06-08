@@ -4,6 +4,8 @@ import com.ddd.movie.pojo.Cinema;
 import com.ddd.movie.service.CinemaService;
 import com.github.pagehelper.PageInfo;
 import com.google.gson.Gson;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.subject.Subject;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -25,11 +27,13 @@ public class CinemaController {
         List<Cinema> cinemaList = pageInfo.getList();
         model.addAttribute("cinemas", cinemaList);
         model.addAttribute("pages", pageInfo);
+        Subject subject = SecurityUtils.getSubject();
+        model.addAttribute("isLogin", subject.isAuthenticated());
 //        return gson.toJson(cinemaList);
         return "cinemaHome";
     }
 
-    @RequestMapping(value = "/{id}", method = {RequestMethod.PUT,RequestMethod.GET})
+    @RequestMapping(value = "/edit/{id}", method = {RequestMethod.PUT, RequestMethod.GET})
     public String editCinema(@PathVariable("id") int id, @RequestParam(name = "name", required = false) String name,
                              @RequestParam(name = "area", required = false) String area,
                              @RequestParam(name = "contactNumber", required = false) String contactNumber,
@@ -52,7 +56,7 @@ public class CinemaController {
         }
     }
 
-    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
+    @RequestMapping(value = "/del/{id}", method = {RequestMethod.GET, RequestMethod.DELETE})
     public String delCinema(@PathVariable("id") int id) {
         Cinema cinema = cinemaService.findById(id);
         if (cinema != null)
@@ -70,7 +74,7 @@ public class CinemaController {
         } else {
             Cinema cinema = new Cinema(name, area, contactNumber, service);
             cinemaService.add(cinema);
-            return "redirect:/cinema";
+            return "redirect:/manage/cinema";
         }
     }
 }

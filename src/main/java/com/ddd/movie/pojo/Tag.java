@@ -7,6 +7,7 @@ import javax.persistence.*;
 public class Tag {
     private int id;
     private String name;
+    private int mid;
 
     @Id
     @Column(name = "id")
@@ -26,6 +27,23 @@ public class Tag {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    @Column(name = "mid")
+    public int getMid() {
+        return mid;
+    }
+
+    public void setMid(int mid) {
+        this.mid = mid;
+    }
+
+    public Tag(String name, int mid) {
+        this.name = name;
+        this.mid = mid;
+    }
+
+    public Tag() {
     }
 
     @Override
