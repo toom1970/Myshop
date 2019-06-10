@@ -41,4 +41,11 @@ public interface ReleaseInfoMapper {
             @Result(property = "cinema", column = "cid", one = @One(select = "com.ddd.movie.mapper.CinemaMapper.findCinemaById"))
     })
     List<ReleaseInfo> findByCinemaId(int cid);
+
+    @Insert("insert into releaseinfo (mid,cid,time,price,type,th,lang)" +
+            " values (#{movie.id},#{cinema.id},#{time},#{price},#{type},#{th},#{lang})")
+    void add(ReleaseInfo releaseInfo);
+
+    @Delete("delete from releaseinfo where id = #{id}")
+    void delete(int id);
 }

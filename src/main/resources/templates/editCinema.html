@@ -18,25 +18,62 @@
     <div class="form-group">
         <label for="inputDirector" class="col-sm-2 control-label">Area</label>
         <div class="col-sm-10">
-            <input type="text" class="form-control" id="inputDirector" name="area" th:placeholder="${cinema.getArea()}">
+            <input type="text" class="form-control" id="inputDirector" name="area"
+                   th:placeholder="${cinema.getArea().getName()}">
         </div>
     </div>
     <div class="form-group">
         <label for="inputReleaseTime" class="col-sm-2 control-label">Contact Number</label>
         <div class="col-sm-10">
-            <input type="text" class="form-control" id="inputReleaseTime" name="contactNumber" th:placeholder="${cinema.getContactNumber()}">
+            <input type="text" class="form-control" id="inputReleaseTime" name="contactNumber"
+                   th:placeholder="${cinema.getContactNumber()}">
         </div>
     </div>
     <div class="form-group">
         <label for="inputService" class="col-sm-2 control-label">Service</label>
         <div class="col-sm-10">
-            <input type="text" class="form-control" id="inputService" name="service" th:placeholder="${cinema.getService()}">
+            <input type="text" class="form-control" id="inputService" name="service"
+                   th:placeholder="${cinema.getService()}">
         </div>
     </div>
+    <table class="table table-hover">
+        <thead>
+        <tr class="active">
+            <th>日期</th>
+            <th>影片</th>
+            <th>影厅</th>
+            <th>时间</th>
+            <th>语言</th>
+            <th>类型</th>
+            <th>价格</th>
+            <th>操作</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="c: ${releases}">
+            <td th:text="${c.getDt()}"></td>
+            <td th:text="${c.getMovie().getName()}"></td>
+            <td th:text="${c.getTh()}"></td>
+            <td th:text="${c.getTm()}"></td>
+            <td th:text="${c.getLang()}"></td>
+            <td th:text="${c.getType()}"></td>
+            <td th:if="${c.getPrice()}!=0" th:text="${c.getPrice()}">价格</td>
+            <td th:unless="${c.getPrice()}!=0" th:text="未知"></td>
+            <td>
+                <button type="button" class="btn btn-default btn-sm btn-danger"
+                        th:onclick="'javascript:jumpDel('+${c.getId()}+','+${cinema.getId()}+')'">
+                    <span class="glyphicon glyphicon-trash delete" aria-hidden="true"></span> Del
+                </button>
+            </td>
+        </tr>
+        </tbody>
+    </table>
     <div class="form-group" style="margin-top: 30px">
         <div class="col-sm-offset-2 col-sm-10">
             <button type="submit" class="btn btn-success">Save</button>
             <button type="button" class="btn btn-danger" onclick=javascrtpt:jumpBack()>Cancel</button>
+            <button type="button" class="btn btn-success" th:onclick="'javascript:jumpAdd('+${cinema.getId()}+')'">Add
+            </button>
         </div>
     </div>
 </form>
@@ -47,7 +84,15 @@
 </body>
 <script>
     function jumpBack() {
-        window.location.href = "/movie/cinema";
+        window.location.href = "/movie/manage/cinema";
+    }
+
+    function jumpDel(id, cid) {
+        window.location.href = "/movie/manage/cinema/delRel/" + id + "?cid=" + cid;
+    }
+
+    function jumpAdd(id) {
+        window.location.href = "/movie/manage/cinema/add/release?cid="+id;
     }
 </script>
 <script src="https://code.jquery.com/jquery.js"></script>

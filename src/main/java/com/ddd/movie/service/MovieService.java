@@ -8,13 +8,17 @@ import java.util.List;
 import java.util.Map;
 
 public interface MovieService {
-    List<Movie> findAll(String url);
+    List<Movie> findAll(int id);
 
     PageInfo findPageByMybatis(Integer page, Integer size);
 
     Movie findById(int id);
 
     Movie findByName(String name);
+
+    Movie findByIdJson(int id);
+
+    int MoviePageNum(String url);
 
     int add(Movie movie);
 

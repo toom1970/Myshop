@@ -4,8 +4,34 @@
     <meta charset="UTF-8">
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
     <title>Movie</title>
+    <link rel="stylesheet" href="../static/css/movie.css">
 </head>
 <body>
+<nav>
+    <div class="nav">
+        <div class="nav_item">
+            <a style="text-decoration:none;" href="/movie/manage/movie">
+                <p>电影</p>
+                <p>Movie</p>
+            </a>
+        </div>
+        <div class="nav_item">
+            <a style="text-decoration:none;" href="/movie/manage/cinema">
+                <p>影院</p>
+                <p>Cinema</p>
+            </a>
+        </div>
+        <div class="nav_item">
+            <a style="text-decoration:none;" href="/movie/manage/user">
+                <p>用户</p>
+                <p>User</p>
+            </a>
+        </div>
+        <li id="reg" th:unless="${isLogin}"><a href="/movie/register">注册</a></li>
+        <li id="login" th:unless="${isLogin}"><a href="/movie/login">登录</a></li>
+        <li id="logout" th:if="${isLogin}"><a href="/movie/logout">退出</a></li>
+    </div>
+</nav>
 <div class="table-responsive">
     <table class="table table-hover">
         <thead>
@@ -20,7 +46,7 @@
         <tbody>
         <tr th:each="m: ${movies}">
             <td th:text="${m.getId()}" id="mid"></td>
-            <td><a th:text="${m.getName()}"></a></td>
+            <td><a th:text="${m.getName()}" th:href="@{'/'+${m.getId()}}"></a></td>
             <td th:text="${m.getDirector()}"></td>
             <td th:text="${m.getFormatDate()}"></td>
             <!--            <td th:text="${m.getReleaseDate()}"></td>-->
@@ -54,7 +80,6 @@
 </div>
 <div class="text-center">
     <input th:unless="${isLogin}" type="button" class="btn btn-success" value="login" onclick=javascrtpt:jump()>
-    <input th:if="${isLogin}" type="button" class="btn btn-success" value="logout" onclick=javascrtpt:jumpLogout()>
     <input th:if="${isLogin}" type="button" class="btn btn-success" value="Add" onclick=javascrtpt:jumpAdd()>
 </div>
 <!--<form id="formRestful" action="" method="get">-->
@@ -65,11 +90,6 @@
     function jump() {
         window.location.href = "/movie/login";
     }
-
-    function jumpLogout() {
-        window.location.href = "/movie/logout";
-    }
-
     function jumpAdd() {
         window.location.href = "/movie/manage/movie/add";
     }

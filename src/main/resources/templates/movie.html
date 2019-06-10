@@ -49,8 +49,9 @@
                 <p>Cinema</p>
             </a>
         </div>
-        <li id="reg"><a href="/movie/register">注册</a></li>
-        <li id="login"><a href="/movie/login">登录</a></li>
+        <li id="reg" th:unless="${isLogin}"><a href="/movie/register">注册</a></li>
+        <li id="login" th:unless="${isLogin}"><a href="/movie/login">登录</a></li>
+        <li id="logout" th:if="${isLogin}"><a href="/movie/logout">退出</a></li>
     </div>
 </nav>
 <div class="container">
@@ -65,7 +66,7 @@
                     </a>
                     <div class="meta">
                         <h1>
-                            <a th:href="@{'/movie/'+${movie.getId()}}" target="_blank"
+                            <a th:href="@{'/'+${movie.getId()}}" target="_blank"
                                th:title="${movie.getName()}"><span th:text="${movie.getName()}"></span></a>
                             <em> - <span th:text="${movie.getScore()}"></span>分</em>
                         </h1>
@@ -78,14 +79,18 @@
     <div class="pager-bg">
         <ul class="pagination pagination-sm">
             <li>
-                <a th:if="${page}>1" th:href="@{'/movie?page='+${page-1}}" th:text="上一页"></a>
+                <a th:if="${page}!=1" th:href="@{'?page='+${page-1}}" data-ci-pagination-page="2"
+                   rel="next">上一页</a>
             </li>
             <li class="active">
                 <a th:text="${page}">1</a>
             </li>
             <li>
-                <a th:if="${nextPage}!=null" th:href="@{'/movie?page='+${nextPage}}" data-ci-pagination-page="2"
-                   rel="next" th:text="下一页"></a>
+                <a th:if="${pages.getPageNum()==0||pages.getPageNum()<pages.getPages()}" th:href="@{'/cinema?page='+${page+1}}" th:text="${page+1}" data-ci-pagination-page="2">2</a>
+            </li>
+            <li>
+                <a th:unless="${pages.isIsLastPage()}" th:href="@{'?page='+${page+1}}"
+                   data-ci-pagination-page="2" rel="next">下一页</a>
             </li>
         </ul>
     </div>

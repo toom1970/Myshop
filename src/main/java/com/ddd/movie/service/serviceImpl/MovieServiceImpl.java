@@ -8,6 +8,7 @@ import com.ddd.movie.pojo.Movie;
 import com.ddd.movie.pojo.Photo;
 import com.ddd.movie.pojo.Tag;
 import com.ddd.movie.service.MovieService;
+import com.ddd.movie.utils.JsonToObjectUtils;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.google.gson.Gson;
@@ -50,20 +51,17 @@ public class MovieServiceImpl implements MovieService {
     }
 
     @Override
-    @Cacheable(key = "'all'")
-    public List<Movie> findAll(String url) {
+//    @Cacheable(key = "'all'")
+    public List<Movie> findAll(int page) {
         CloseableHttpClient httpClient = HttpClientBuilder.create().build();
+        String url = "http://127.0.0.1:5000/movieOnInfoList?offset=" + 12 * page;
         HttpGet httpGet = new HttpGet(url);
         CloseableHttpResponse httpResponse = null;
         try {
             httpResponse = httpClient.execute(httpGet);
             HttpEntity responseEntity = httpResponse.getEntity();
             String response = EntityUtils.toString(responseEntity);
-            JsonObject jsonResponse = gson.fromJson(response, JsonObject.class);
-
-            System.out.println("响应状态为:" + httpResponse.getStatusLine());
-            System.out.println("响应内容长度为:" + responseEntity.getContentLength());
-            System.out.println(jsonResponse.toString());
+            return new JsonToObjectUtils().JsonToMovieList(response,page);
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
@@ -77,7 +75,31 @@ public class MovieServiceImpl implements MovieService {
             }
         }
         return null;
-//        return movieDao.findAll();
+    }
+
+    public int MoviePageNum(String url) {
+        CloseableHttpClient httpClient = HttpClientBuilder.create().build();
+        HttpGet httpGet = new HttpGet(url);
+        CloseableHttpResponse httpResponse = null;
+        try {
+            httpResponse = httpClient.execute(httpGet);
+            HttpEntity responseEntity = httpResponse.getEntity();
+            String response = EntityUtils.toString(responseEntity);
+            int n = new Gson().fromJson(response, JsonObject.class).get("total").getAsInt();
+            return n / 12;
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (httpResponse != null)
+                    httpResponse.close();
+                if (httpClient != null)
+                    httpClient.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return 1;
     }
 
     @Override
@@ -85,6 +107,35 @@ public class MovieServiceImpl implements MovieService {
     public Movie findById(int id) {
         return movieMapper.findMovieById(id);
     }
+
+    @Override
+//    @Cacheable(key = "#id")
+    public Movie findByIdJson(int id) {
+        CloseableHttpClient httpClient = HttpClientBuilder.create().build();
+        String url = "http://127.0.0.1:5000/movieDetail?movieId=" + id;
+        HttpGet httpGet = new HttpGet(url);
+        CloseableHttpResponse httpResponse = null;
+        try {
+            httpResponse = httpClient.execute(httpGet);
+            HttpEntity responseEntity = httpResponse.getEntity();
+            String response = EntityUtils.toString(responseEntity);
+            Movie movie = new JsonToObjectUtils().JsonToMovie(response);
+            return movie;
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (httpResponse != null)
+                    httpResponse.close();
+                if (httpClient != null)
+                    httpClient.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return null;
+    }
+
 
     @Override
     public Movie findByName(String name) {

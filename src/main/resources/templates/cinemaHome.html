@@ -4,8 +4,34 @@
     <meta charset="UTF-8">
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
     <title>Cinema</title>
+    <link rel="stylesheet" href="../static/css/movie.css">
 </head>
 <body>
+<nav>
+    <div class="nav">
+        <div class="nav_item">
+            <a style="text-decoration:none;" href="/movie/manage/movie">
+                <p>电影</p>
+                <p>Movie</p>
+            </a>
+        </div>
+        <div class="nav_item">
+            <a style="text-decoration:none;" href="/movie/manage/cinema">
+                <p>影院</p>
+                <p>Cinema</p>
+            </a>
+        </div>
+        <div class="nav_item">
+            <a style="text-decoration:none;" href="/movie/manage/user">
+                <p>用户</p>
+                <p>User</p>
+            </a>
+        </div>
+        <li id="reg" th:unless="${isLogin}"><a href="/movie/register">注册</a></li>
+        <li id="login" th:unless="${isLogin}"><a href="/movie/login">登录</a></li>
+        <li id="logout" th:if="${isLogin}"><a href="/movie/logout">退出</a></li>
+    </div>
+</nav>
 <div class="table-responsive">
     <table class="table table-hover">
         <thead>
@@ -22,7 +48,7 @@
         <tr th:each="c: ${cinemas}">
             <td th:text="${c.getId()}"></td>
             <td th:text="${c.getName()}"></td>
-            <td th:text="${c.getArea()}"></td>
+            <td th:text="${c.getArea().getName()}"></td>
             <td th:text="${c.getContactNumber()}"></td>
             <td th:text="${c.getService()}">service</td>
             <td>
@@ -45,17 +71,20 @@
         <li><a th:if="${pages.isIsFirstPage()}" th:href="@{'?page='+${pages.getPageNum()}}">&laquo;</a></li>
         <li><a th:unless="${pages.isIsFirstPage()}" th:href="@{'?page='+${pages.getPageNum()-1}}">&laquo;</a></li>
         <li><a th:href="@{'?page='+${pages.getPageNum()}}" th:text="${pages.getPageNum()}">1</a></li>
-        <li><a th:if="${pages.getPages()}>=2" th:href="@{'?page='+${pages.getPageNum()}}+1">2</a></li>
-        <li><a th:if="${pages.getPages()}>=3" th:href="@{'?page='+${pages.getPageNum()}}+2">3</a></li>
-        <li><a th:if="${pages.getPages()}>=4" th:href="@{'?page='+${pages.getPageNum()}}+3">4</a></li>
-        <li><a th:if="${pages.getPages()}>=5" th:href="@{'?page='+${pages.getPageNum()}}+4">5</a></li>
+        <li><a th:if="${pages.getPageNum()+1}<=${pages.getNavigateLastPage()}"
+               th:href="@{'?page='+${pages.getPageNum()+1}}" th:text="${pages.getPageNum()+1}">2</a></li>
+        <li><a th:if="${pages.getPageNum()+2}<=${pages.getNavigateLastPage()}"
+               th:href="@{'?page='+${pages.getPageNum()+2}}" th:text="${pages.getPageNum()+2}">3</a></li>
+        <li><a th:if="${pages.getPageNum()+3}<=${pages.getNavigateLastPage()}"
+               th:href="@{'?page='+${pages.getPageNum()+3}}" th:text="${pages.getPageNum()+3}">4</a></li>
+        <li><a th:if="${pages.getPageNum()+4}<=${pages.getNavigateLastPage()}"
+               th:href="@{'?page='+${pages.getPageNum()+4}}" th:text="${pages.getPageNum()+4}">5</a></li>
         <li><a th:if="${pages.isIsLastPage()}" th:href="@{'?page='+${pages.getPageNum()}}">&raquo;</a></li>
         <li><a th:unless="${pages.isIsLastPage()}" th:href="@{'?page='+${pages.getPageNum()+1}}">&raquo;</a></li>
     </ul>
 </div>
 <div class="text-center">
     <input th:unless="${isLogin}" type="button" class="btn btn-success" value="login" onclick=javascrtpt:jump()>
-    <input th:if="${isLogin}" type="button" class="btn btn-success" value="logout" onclick=javascrtpt:jumpLogout()>
     <input th:if="${isLogin}" type="button" class="btn btn-success" value="Add" onclick=javascrtpt:jumpAdd()>
 </div>
 <!--<form id="formrestful" action="" method="POST">-->
@@ -66,11 +95,6 @@
     function jump() {
         window.location.href = "/movie/login";
     }
-
-    function jumpLogout() {
-        window.location.href = "/movie/logout";
-    }
-
     function jumpAdd() {
         window.location.href = "/movie/manage/cinema/add";
     }

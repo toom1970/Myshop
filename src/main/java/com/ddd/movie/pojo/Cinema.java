@@ -8,7 +8,7 @@ import java.io.Serializable;
 public class Cinema implements Serializable {
     private int id;
     private String name;
-    private String area;
+    private Area area;
     private String contactNumber;
     private String service;
 
@@ -31,12 +31,12 @@ public class Cinema implements Serializable {
         this.name = name;
     }
 
-    @Column(name = "area")
-    public String getArea() {
+    @Transient
+    public Area getArea() {
         return area;
     }
 
-    public void setArea(String area) {
+    public void setArea(Area area) {
         this.area = area;
     }
 
@@ -58,13 +58,21 @@ public class Cinema implements Serializable {
         this.service = service;
     }
 
-    public Cinema(String name, String area, String contactNumber, String service) {
+    public Cinema(String name, String contactNumber, String service) {
         this.name = name;
-        this.area = area;
         this.contactNumber = contactNumber;
         this.service = service;
     }
 
     public Cinema() {
+        this.area = new Area();
+        this.service = "3D眼镜";
+    }
+
+    public Cinema(int id, String name, Area area) {
+        this.id = id;
+        this.name = name;
+        this.area = area;
+        this.service = "3D眼镜";
     }
 }

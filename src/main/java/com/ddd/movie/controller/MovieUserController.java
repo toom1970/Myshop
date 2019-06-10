@@ -3,6 +3,8 @@ package com.ddd.movie.controller;
 import com.ddd.movie.pojo.Movie;
 import com.ddd.movie.service.MovieService;
 import com.github.pagehelper.PageInfo;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.subject.Subject;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -11,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -21,20 +24,34 @@ public class MovieUserController {
 
     @RequestMapping({"", "/"})
     public String index(@RequestParam(value = "page", required = false, defaultValue = "1") Integer page, Model model) {
-        String url = "https://api.douban.com/v2/movie/subject/1866479?apikey=0df993c66c0c636e29ecbb5344252a4a";
-//        List<Movie> movies = movieService.findAll(url);
-        PageInfo pageinfo = movieService.findPageByMybatis(page, 20);
-        model.addAttribute("movies", pageinfo.getList());
-        model.addAttribute("pages", pageinfo);
-//        model.addAttribute("movies", movies);
+        int pageN = movieService.MoviePageNum("http://127.0.0.1:5000/movieOnInfoList?offset=12");
+        List<Movie> movies;
+        PageInfo pageInfo = new PageInfo();
+        if (page <= pageN) {
+            movies = movieService.findAll(page);
+        } else {
+            pageInfo = movieService.findPageByMybatis(page - pageN, 12);
+            movies = pageInfo.getList();
+        }
+        model.addAttribute("movies", movies);
         model.addAttribute("page", page);
-        model.addAttribute("nextPage", page + 1);
+        model.addAttribute("pages", pageInfo);
+        Subject subject = SecurityUtils.getSubject();
+        model.addAttribute("isLogin", subject.isAuthenticated());
         return "movie";
     }
+
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public String browseMovie(@PathVariable("id") int id, Model model) {
-        Movie movie = movieService.findById(id);
+        Movie movie = null;
+        movie = movieService.findById(id);
+        if (movie == null)
+            movie = movieService.findByIdJson(id);
+        if (movie == null)
+            movie = new Movie();
         model.addAttribute("movie", movie);
+        Subject subject = SecurityUtils.getSubject();
+        model.addAttribute("isLogin", subject.isAuthenticated());
         return "movieDetails";
     }
 }

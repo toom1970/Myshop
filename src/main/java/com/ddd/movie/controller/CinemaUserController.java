@@ -5,7 +5,10 @@ import com.ddd.movie.pojo.Movie;
 import com.ddd.movie.pojo.ReleaseInfo;
 import com.ddd.movie.service.CinemaService;
 import com.ddd.movie.service.ReleaseInfoService;
+import com.ddd.movie.utils.JsonToObjectUtils;
 import com.github.pagehelper.PageInfo;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.subject.Subject;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -27,23 +30,45 @@ public class CinemaUserController {
 
     @RequestMapping({"", "/"})
     public String index(@RequestParam(name = "page", required = false, defaultValue = "1") Integer page, Model model) {
-        PageInfo pageInfo = cinemaService.findPageByMybatis(page, 5);
-        List<Cinema> cinemaList = pageInfo.getList();
-        model.addAttribute("cinemas", cinemaList);
+        List<Cinema> cinemaList;
+        PageInfo pageInfo = new PageInfo();
+        int pageN = cinemaService.cinemaPageNum("http://127.0.0.1:5000/cinemaList?offset=20&districtId=-1&lineId=-1&areaId=-1&stationId=-1&cityId=50");
+        if (page <= pageN) {
+            String url = "http://127.0.0.1:5000/cinemaList?offset=" + 20 * page + "&districtId=-1&lineId=-1&areaId=-1&stationId=-1&cityId=50";
+            cinemaList = cinemaService.findAll(url);
+        } else {
+            pageInfo = cinemaService.findPageByMybatis(page - pageN, 20);
+            cinemaList = pageInfo.getList();
+        }
         model.addAttribute("pages", pageInfo);
+        model.addAttribute("cinemas", cinemaList);
+        model.addAttribute("page", page);
+        Subject subject = SecurityUtils.getSubject();
+        model.addAttribute("isLogin", subject.isAuthenticated());
         return "cinema";
     }
 
-    @RequestMapping(value = "/{id}", method = {RequestMethod.PUT, RequestMethod.GET})
+    @RequestMapping(value = "/{id}", method = {RequestMethod.GET})
     public String editCinema(@PathVariable("id") int id, Model model) {
-        Cinema cinema = cinemaService.findById(id);
-        List<ReleaseInfo> releaseInfos = releaseInfoService.findByCinemaId(id);
+        Cinema cinema = null;
         List<Movie> movies = new ArrayList<>();
-        for (ReleaseInfo r : releaseInfos) {
-            movies.add(r.getMovie());
+        List<ReleaseInfo> releaseInfos;
+        cinema = cinemaService.findById(id);
+        if (cinema != null) {
+            releaseInfos = releaseInfoService.findByCinemaId(id);
+            for (ReleaseInfo r : releaseInfos) {
+                movies.add(r.getMovie());
+            }
+        } else {
+            cinema = cinemaService.findByIdJson(id);
+            movies = cinemaService.findReleaseMovie(id);
+            releaseInfos = cinemaService.findReleaseInfo(id);
         }
+        if (cinema == null)
+            cinema = new Cinema();
         model.addAttribute("releaseMovie", movies);
         model.addAttribute("cinema", cinema);
+        model.addAttribute("release", releaseInfos);
         return "cinemaDetails";
     }
 }

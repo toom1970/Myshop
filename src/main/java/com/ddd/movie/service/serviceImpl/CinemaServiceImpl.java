@@ -3,9 +3,20 @@ package com.ddd.movie.service.serviceImpl;
 import com.ddd.movie.dao.CinemaDao;
 import com.ddd.movie.mapper.CinemaMapper;
 import com.ddd.movie.pojo.Cinema;
+import com.ddd.movie.pojo.Movie;
+import com.ddd.movie.pojo.ReleaseInfo;
 import com.ddd.movie.service.CinemaService;
+import com.ddd.movie.utils.JsonToObjectUtils;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import org.apache.http.HttpEntity;
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.http.util.EntityUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -21,13 +32,91 @@ public class CinemaServiceImpl implements CinemaService {
     @Override
     public PageInfo findPageByMybatis(Integer page, Integer size) {
         PageHelper.startPage(page, size);
-        List<Cinema> pagelist = cinemaDao.findAll();
+        List<Cinema> pagelist = cinemaMapper.findAll();
         return new PageInfo<>(pagelist);
     }
 
     @Override
     public Cinema findById(int id) {
-        return cinemaDao.findById(id).orElse(new Cinema());
+        return cinemaMapper.findCinemaById(id);
+    }
+
+    @Override
+    public Cinema findByIdJson(int id) {
+        CloseableHttpClient httpClient = HttpClientBuilder.create().build();
+        String url = "http://127.0.0.1:5000/cinemaDetail?cinemaId=" + id;
+        HttpGet httpGet = new HttpGet(url);
+        CloseableHttpResponse httpResponse = null;
+        try {
+            httpResponse = httpClient.execute(httpGet);
+            HttpEntity responseEntity = httpResponse.getEntity();
+            String response = EntityUtils.toString(responseEntity);
+            return new JsonToObjectUtils().JsonToCinema(response);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (httpResponse != null)
+                    httpResponse.close();
+                if (httpClient != null)
+                    httpClient.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public List<Movie> findReleaseMovie(int id) {
+        CloseableHttpClient httpClient = HttpClientBuilder.create().build();
+        String url = "http://127.0.0.1:5000/cinemaDetail?cinemaId=" + id;
+        HttpGet httpGet = new HttpGet(url);
+        CloseableHttpResponse httpResponse = null;
+        try {
+            httpResponse = httpClient.execute(httpGet);
+            HttpEntity responseEntity = httpResponse.getEntity();
+            String response = EntityUtils.toString(responseEntity);
+            return new JsonToObjectUtils().JsonToReleaseMovieList(response);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (httpResponse != null)
+                    httpResponse.close();
+                if (httpClient != null)
+                    httpClient.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public List<ReleaseInfo> findReleaseInfo(int id) {
+        CloseableHttpClient httpClient = HttpClientBuilder.create().build();
+        String url = "http://127.0.0.1:5000/cinemaDetail?cinemaId=" + id;
+        HttpGet httpGet = new HttpGet(url);
+        CloseableHttpResponse httpResponse = null;
+        try {
+            httpResponse = httpClient.execute(httpGet);
+            HttpEntity responseEntity = httpResponse.getEntity();
+            String response = EntityUtils.toString(responseEntity);
+            return new JsonToObjectUtils().JsonToReleaseInfoList(response);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (httpResponse != null)
+                    httpResponse.close();
+                if (httpClient != null)
+                    httpClient.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return null;
     }
 
     @Override
@@ -36,8 +125,53 @@ public class CinemaServiceImpl implements CinemaService {
     }
 
     @Override
-    public List<Cinema> findAll() {
-        return cinemaDao.findAll();
+    public List<Cinema> findAll(String url) {
+        CloseableHttpClient httpClient = HttpClientBuilder.create().build();
+        HttpGet httpGet = new HttpGet(url);
+        CloseableHttpResponse httpResponse = null;
+        try {
+            httpResponse = httpClient.execute(httpGet);
+            HttpEntity responseEntity = httpResponse.getEntity();
+            String response = EntityUtils.toString(responseEntity);
+            return new JsonToObjectUtils().JsonToCinemaList(response);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (httpResponse != null)
+                    httpResponse.close();
+                if (httpClient != null)
+                    httpClient.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return null;
+    }
+
+    public int cinemaPageNum(String url) {
+        CloseableHttpClient httpClient = HttpClientBuilder.create().build();
+        HttpGet httpGet = new HttpGet(url);
+        CloseableHttpResponse httpResponse = null;
+        try {
+            httpResponse = httpClient.execute(httpGet);
+            HttpEntity responseEntity = httpResponse.getEntity();
+            String response = EntityUtils.toString(responseEntity);
+            int n = new Gson().fromJson(response, JsonObject.class).get("paging").getAsJsonObject().get("total").getAsInt();
+            return n / 20;
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (httpResponse != null)
+                    httpResponse.close();
+                if (httpClient != null)
+                    httpClient.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return 1;
     }
 
     @Override

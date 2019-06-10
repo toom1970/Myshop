@@ -27,8 +27,9 @@
                 <p>Cinema</p>
             </a>
         </div>
-        <li id="reg"><a href="/movie/register">注册</a></li>
-        <li id="login"><a href="/movie/login/user">登录</a></li>
+        <li id="reg" th:unless="${isLogin}"><a href="/movie/register">注册</a></li>
+        <li id="login" th:unless="${isLogin}"><a href="/movie/login">登录</a></li>
+        <li id="logout" th:if="${isLogin}"><a href="/movie/logout">退出</a></li>
     </div>
 </nav>
 <div class="container">
@@ -105,6 +106,7 @@
                                     <span class="info-label">上映时间</span>
                                 </td>
                                 <td th:text="${movie.getFormatDate()}"></td>
+<!--                                <td th:text="${movie.getReleaseDate()}"></td>-->
                             </tr>
                             <tr>
                                 <td class="span2">

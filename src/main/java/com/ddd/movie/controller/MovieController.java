@@ -1,9 +1,7 @@
 package com.ddd.movie.controller;
 
 import com.ddd.movie.pojo.Movie;
-import com.ddd.movie.pojo.Photo;
 import com.ddd.movie.service.MovieService;
-import com.ddd.movie.utils.JsonToObjectUtils;
 import com.github.pagehelper.PageInfo;
 import com.google.gson.Gson;
 import org.apache.shiro.SecurityUtils;
@@ -46,21 +44,29 @@ public class MovieController {
 
     @RequestMapping(value = "/{id}", method = {RequestMethod.GET})
     public String browseMovie(@PathVariable("id") int id, Model model) {
-        Movie movie = movieService.findById(id);
-        model.addAttribute("movie", movie);
+//        Movie movie = movieService.findById(id);
+//        Movie movie = movieService.findByIdJson(id);
+//        model.addAttribute("movie", movie);
         return "redirect:/" + id;
     }
 
-//    @RequestMapping(value = "/{id}", method = RequestMethod.POST)
-//    public String nothing(@PathVariable("id") int id) {
-//        return null;
-//    }
-
     @RequestMapping(value = "/edit/{id}")
 //    @ResponseBody
-    public String editMovie(@PathVariable("id") int id, @RequestParam(value = "name", required = false) String name, @RequestParam(value = "director", required = false) String director, @RequestParam(value = "releasetime", required = false) String releaseTime, Model model) {
+    public String editMovie(@PathVariable("id") int id,
+                            @RequestParam(value = "name", required = false) String name,
+                            @RequestParam(value = "director", required = false) String director,
+                            @RequestParam(value = "releasetime", required = false) String releaseTime,
+                            @RequestParam(value = "type", required = false) String type,
+                            @RequestParam(value = "starring", required = false) String starring,
+                            @RequestParam(value = "language", required = false) String language,
+                            @RequestParam(value = "length", required = false) String length,
+                            @RequestParam(value = "otherName", required = false) String otherName,
+                            @RequestParam(value = "introduction", required = false) String introduction,
+                            @RequestParam(value = "score", required = false) Double score,
+                            @RequestParam(value = "img", required = false) String img,
+                            Model model) {
         Movie movie = movieService.findById(id);
-        if (name == null && director == null && releaseTime == null) {
+        if (name == null && director == null && releaseTime == null && type == null && starring == null && score == null && language == null && length == null && otherName == null && introduction == null && img == null) {
             model.addAttribute("movie", movie);
             return "editMovie";
         } else {
@@ -75,6 +81,24 @@ public class MovieController {
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
+            }
+            if (!type.equals(""))
+                movie.setType(type);
+            if (!starring.equals(""))
+                movie.setStarring(starring);
+            if (!language.equals(""))
+                movie.setLanguage(language);
+            if (!length.equals(""))
+                movie.setLength(length);
+            if (!otherName.equals(""))
+                movie.setOtherName(otherName);
+            if (!introduction.equals(""))
+                movie.setIntroduction(introduction);
+            if (!img.equals(""))
+                movie.setAlbumImg(img);
+            if (score != null) {
+                double s = score;
+                movie.setScore((float) s);
             }
             movieService.update(movie);
             return "redirect:/manage/movie";
@@ -92,8 +116,16 @@ public class MovieController {
     @RequestMapping(value = "/add")
     public String addMoviePage(@RequestParam(value = "name", required = false) String name,
                                @RequestParam(value = "director", required = false) String director,
-                               @RequestParam(value = "releasetime", required = false) String releaseTime) {
-        if (name == null && director == null && releaseTime == null) {
+                               @RequestParam(value = "releasetime", required = false) String releaseTime,
+                               @RequestParam(value = "type", required = false) String type,
+                               @RequestParam(value = "starring", required = false) String starring,
+                               @RequestParam(value = "language", required = false) String language,
+                               @RequestParam(value = "length", required = false) String length,
+                               @RequestParam(value = "otherName", required = false) String otherName,
+                               @RequestParam(value = "introduction", required = false) String introduction,
+                               @RequestParam(value = "score", required = false) Double score,
+                               @RequestParam(value = "img", required = false) String img) {
+        if (name == null && director == null && releaseTime == null && type == null && starring == null && score == null && language == null && length == null && otherName == null && introduction == null && img == null) {
             return "addMovie";
         } else {
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");

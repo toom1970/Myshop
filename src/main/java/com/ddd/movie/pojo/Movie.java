@@ -259,10 +259,30 @@ public class Movie implements Serializable {
     public Movie() {
     }
 
+    public Movie(int id, String name, String albumImg, float score, Date date) {
+        this.id = id;
+        this.name = name;
+        this.albumImg = albumImg;
+        this.score = score;
+        this.releaseDate = date;
+    }
+
+    public Movie(int id, String name, String albumImg, float score) {
+        this.id = id;
+        this.name = name;
+        this.albumImg = albumImg;
+        this.score = score;
+    }
+
     public Movie(String name, String director, Date releaseDate) {
         this.name = name;
         this.director = director;
         this.releaseDate = releaseDate;
+    }
+
+    public Movie(int id, String name) {
+        this.id = id;
+        this.name = name;
     }
 
     @Override

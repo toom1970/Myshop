@@ -16,19 +16,20 @@
 <nav>
     <div class="nav">
         <div class="nav_item">
-            <a style="text-decoration:none;" href="#">
+            <a style="text-decoration:none;" href="/movie">
                 <p>电影</p>
                 <p>Movie</p>
             </a>
         </div>
         <div class="nav_item">
-            <a style="text-decoration:none;" href="#">
+            <a style="text-decoration:none;" href="/movie/cinema">
                 <p>影院</p>
                 <p>Cinema</p>
             </a>
         </div>
-        <li id="reg"><a href="/movie/register">注册</a></li>
-        <li id="login"><a href="/movie/login/user">登录</a></li>
+        <li id="reg" th:unless="${isLogin}"><a href="/movie/register">注册</a></li>
+        <li id="login" th:unless="${isLogin}"><a href="/movie/login">登录</a></li>
+        <li id="logout" th:if="${isLogin}"><a href="/movie/logout">退出</a></li>
     </div>
 </nav>
 <div class="container">
@@ -57,7 +58,7 @@
                                     <span class="info-label">影院地址</span>
                                 </td>
                                 <td>
-                                    <a target="_blank" th:text="${cinema.getArea()}"></a>
+                                    <a target="_blank" th:text="${cinema.getArea().getName()}"></a>
                                 </td>
                             </tr>
                             <tr>
@@ -102,7 +103,35 @@
                     <div class="col-xs-12">
                         <h2>场次信息</h2>
                     </div>
+                    <div style="padding:0 10px;">
+                        <div class="col-xs-12 movie-recommened">
+                            <!--                            <a target="_blank" title="何以笙箫默(2015)" th:href="@{'/'+${movie.getId()}}">-->
+                            <!--                                <h5 th:text="${movie.getName()}">aaa</h5>-->
+                            <!--                            </a>-->
+                            <table class="col-xs-12">
+                                <tr>
+                                    <td>日期</td>
+                                    <td>影片</td>
+                                    <td>影厅</td>
+                                    <td>时间</td>
+                                    <td>语言</td>
+                                    <td>类型</td>
+                                    <td>价格</td>
+                                </tr>
+                                <tr th:each="r:${release}">
+                                    <td th:text="${r.getDt()}">日期</td>
+                                    <td th:text="${r.getMovie().getName()}">影片</td>
+                                    <td th:text="${r.getTh()}">影厅</td>
+                                    <td th:text="${r.getTm()}">时间</td>
+                                    <td th:text="${r.getLang()}">语言</td>
+                                    <td th:text="${r.getType()}">类型</td>
+                                    <td th:if="${r.getPrice()}!=0" th:text="${r.getPrice()}">价格</td>
+                                    <td th:unless="${r.getPrice()}!=0" th:text="未知"></td>
+                                </tr>
+                            </table>
 
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

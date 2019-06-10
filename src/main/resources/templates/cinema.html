@@ -45,8 +45,9 @@
                 <p>Cinema</p>
             </a>
         </div>
-        <li id="reg"><a href="/movie/register">注册</a></li>
-        <li id="login"><a href="/movie/login">登录</a></li>
+        <li id="reg" th:unless="${isLogin}"><a href="/movie/register">注册</a></li>
+        <li id="login" th:unless="${isLogin}"><a href="/movie/login">登录</a></li>
+        <li id="logout" th:if="${isLogin}"><a href="/movie/logout">退出</a></li>
     </div>
 </nav>
 <div class="container">
@@ -55,12 +56,13 @@
         <div class="col-xs-12" style="padding:0 5px;" th:each="cinema:${cinemas}">
             <a style="position:relative;display:block;" title="OAC影城" target="_blank" href=""></a>
             <div class="met">
-                <a th:href="@{'/cinema/'+${cinema.getId()}}" target="_blank" title="OAC影城" th:text="${cinema.getName()}">OAC影城</a>
+                <a th:href="@{'/cinema/'+${cinema.getId()}}" target="_blank" title="OAC影城"
+                   th:text="${cinema.getName()}">OAC影城</a>
                 <div style="text-align:right;">
                     <a href="">
                     </a>
                 </div>
-                <div class="otherinf" th:text="${cinema.getArea()}">
+                <div class="otherinf" th:text="${cinema.getArea().getName()}">
                     地址：富阳区富春街道桂花西路82号
                 </div>
             </div>
@@ -69,15 +71,22 @@
     <!-- 分页 -->
     <div class="pager-bg">
         <ul class="pagination pagination-sm">
+            <li>
+                <a th:if="${page}!=1" th:href="@{'/cinema?page='+${page-1}}" data-ci-pagination-page="2"
+                   rel="next">上一页</a>
+            </li>
             <li class="active">
-                <a>1</a>
+                <a th:text="${page}">1</a>
             </li>
             <li>
-                <a href="/movie/?page=2" data-ci-pagination-page="2">2</a>
+                <a th:if="${pages.getPageNum()==0||pages.getPageNum()<pages.getPages()}" th:href="@{'/cinema?page='+${page+1}}" th:text="${page+1}" data-ci-pagination-page="2">2</a>
             </li>
             <li>
-                <a href="/movie/?page=2" data-ci-pagination-page="2" rel="next">下一页</a>
+                <a th:unless="${pages.isIsLastPage()}" th:href="@{'/cinema?page='+${page+1}}"
+                   data-ci-pagination-page="2" rel="next">下一页</a>
             </li>
+            <!--            <li><a th:if="${pages.isIsLastPage()}" th:href="@{'?page='+${pages.getPageNum()}}">&raquo;</a></li>-->
+<!--            <li><a th:unless="${pages.isIsLastPage()}" th:href="@{'/cinema?page='+${page+1}}">&raquo;</a></li>-->
         </ul>
     </div>
 </div>
