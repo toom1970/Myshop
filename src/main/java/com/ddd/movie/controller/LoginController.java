@@ -36,16 +36,20 @@ public class LoginController {
                     subject.login(token);
                 } catch (UnknownAccountException e) {
                     model.addAttribute("loginMessage", e.getMessage());
-                    return "login";
+                    return e.getMessage();
+//                    return "login";
                 } catch (IncorrectCredentialsException e) {
                     model.addAttribute("loginMessage", e.getMessage());
-                    return "login";
+                    return e.getMessage();
+//                    return "login";
                 } catch (LockedAccountException e) {
                     model.addAttribute("loginMessage", e.getMessage());
-                    return "login";
+                    return e.getMessage();
+//                    return "login";
                 } catch (AuthenticationException e) {
                     model.addAttribute("loginMessage", e.getMessage());
-                    return "login";
+                    return e.getMessage();
+//                    return "login";
                 }
             }
             User user = (User) subject.getPrincipal();
